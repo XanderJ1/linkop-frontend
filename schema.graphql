@@ -1,0 +1,843 @@
+"""
+The purpose of the `cost` directive is to define a `weight` for GraphQL types, fields, and arguments. Static analysis can use these weights when calculating the overall cost of a query or response.
+"""
+directive @cost(
+  """
+  The `weight` argument defines what value to add to the overall cost for every appearance, or possible appearance, of a type, field, argument, etc.
+  """
+  weight: String!
+) on ARGUMENT_DEFINITION | ENUM | FIELD_DEFINITION | INPUT_FIELD_DEFINITION | OBJECT | SCALAR
+
+"""
+The purpose of the `@listSize` directive is to either inform the static analysis about the size of returned lists (if that information is statically available), or to point the analysis to where to find that information.
+"""
+directive @listSize(
+  """
+  The `assumedSize` argument can be used to statically define the maximum length of a list returned by a field.
+  """
+  assumedSize: Int
+
+  """
+  The `requireOneSlicingArgument` argument can be used to inform the static analysis that it should expect that exactly one of the defined slicing arguments is present in a query. If that is not the case (i.e., if none or multiple slicing arguments are present), the static analysis may throw an error.
+  """
+  requireOneSlicingArgument: Boolean = true
+
+  """
+  The `sizedFields` argument can be used to define that the value of the `assumedSize` argument or of a slicing argument does not affect the size of a list returned by a field itself, but that of a list returned by one of its sub-fields.
+  """
+  sizedFields: [String!]
+
+  """
+  The `slicingArgumentDefaultValue` argument can be used to define a default value for a slicing argument, which is used if the argument is not present in a query.
+  """
+  slicingArgumentDefaultValue: Int
+
+  """
+  The `slicingArguments` argument can be used to define which of the field's arguments with numeric type are slicing arguments, so that their value determines the size of the list returned by that field. It may specify a list of multiple slicing arguments.
+  """
+  slicingArguments: [String!]
+) on FIELD_DEFINITION
+
+input BooleanOperationFilterInput {
+  eq: Boolean
+  neq: Boolean
+}
+
+type CallResult {
+  code: Int!
+  message: String
+  success: Boolean!
+}
+
+type CallResultOfString {
+  code: Int!
+  message: String
+  result: String
+  success: Boolean!
+}
+
+enum Category {
+  ENTERTAINMENT
+  HAPPY_HOUR
+  MEETING
+  OTHER
+}
+
+input CategoryOperationFilterInput {
+  eq: Category
+  in: [Category!]
+  neq: Category
+  nin: [Category!]
+}
+
+input CreateEventInput {
+  date: DateTime!
+  description: String!
+  eventLocation: EventLocationInput
+  imageUrl: String!
+  location: String!
+  name: String!
+  privacy: Privacy!
+}
+
+"""
+The `DateTime` scalar type represents a date and time with time zone offset information.
+"""
+scalar DateTime
+
+input DateTimeOperationFilterInput {
+  eq: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime]
+  lt: DateTime
+  lte: DateTime
+  neq: DateTime
+  ngt: DateTime
+  ngte: DateTime
+  nin: [DateTime]
+  nlt: DateTime
+  nlte: DateTime
+}
+
+input DeleteEventInput {
+  eventId: Int!
+}
+
+input DeleteUserInput {
+  userId: UUID!
+}
+
+type EventContext {
+  category: Category!
+  creator: UserContext!
+  creatorId: UUID!
+  eventDate: DateTime!
+  eventDescription: String!
+  eventLocation: EventLocation
+  eventLocationId: UUID
+  eventName: String!
+  guests: [GuestContext!]!
+  id: UUID!
+  locationName: String!
+  pictureUrl: String!
+  privacy: Privacy!
+}
+
+input EventContextFilterInput {
+  and: [EventContextFilterInput!]
+  category: CategoryOperationFilterInput
+  creator: UserContextFilterInput
+  creatorId: UuidOperationFilterInput
+  eventDate: DateTimeOperationFilterInput
+  eventDescription: StringOperationFilterInput
+  eventLocation: EventLocationFilterInput
+  eventLocationId: UuidOperationFilterInput
+  eventName: StringOperationFilterInput
+  guests: ListFilterInputTypeOfGuestContextFilterInput
+  id: UuidOperationFilterInput
+  locationName: StringOperationFilterInput
+  or: [EventContextFilterInput!]
+  pictureUrl: StringOperationFilterInput
+  privacy: PrivacyOperationFilterInput
+}
+
+input EventContextSortInput {
+  category: SortEnumType
+  creator: UserContextSortInput
+  creatorId: SortEnumType
+  eventDate: SortEnumType
+  eventDescription: SortEnumType
+  eventLocation: EventLocationSortInput
+  eventLocationId: SortEnumType
+  eventName: SortEnumType
+  id: SortEnumType
+  locationName: SortEnumType
+  pictureUrl: SortEnumType
+  privacy: SortEnumType
+}
+
+type EventLocation {
+  id: UUID!
+  latitude: Float!
+  longitude: Float!
+}
+
+input EventLocationFilterInput {
+  and: [EventLocationFilterInput!]
+  id: UuidOperationFilterInput
+  latitude: FloatOperationFilterInput
+  longitude: FloatOperationFilterInput
+  or: [EventLocationFilterInput!]
+}
+
+input EventLocationInput {
+  id: UUID!
+  latitude: Float!
+  longitude: Float!
+}
+
+input EventLocationSortInput {
+  id: SortEnumType
+  latitude: SortEnumType
+  longitude: SortEnumType
+}
+
+"""A connection to a list of items."""
+type EventsConnection {
+  """A list of edges."""
+  edges: [EventsEdge!]
+
+  """A flattened list of the nodes."""
+  nodes: [EventContext!]
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+
+"""An edge in a connection."""
+type EventsEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of the edge."""
+  node: EventContext!
+}
+
+"""A connection to a list of items."""
+type EventsNearMeConnection {
+  """A list of edges."""
+  edges: [EventsNearMeEdge!]
+
+  """A flattened list of the nodes."""
+  nodes: [EventContext!]
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+
+"""An edge in a connection."""
+type EventsNearMeEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of the edge."""
+  node: EventContext!
+}
+
+"""A connection to a list of items."""
+type FetchUsersConnection {
+  """A list of edges."""
+  edges: [FetchUsersEdge!]
+
+  """A flattened list of the nodes."""
+  nodes: [UserContext!]
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+
+"""An edge in a connection."""
+type FetchUsersEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of the edge."""
+  node: UserContext!
+}
+
+input FloatOperationFilterInput {
+  eq: Float
+  gt: Float
+  gte: Float
+  in: [Float]
+  lt: Float
+  lte: Float
+  neq: Float
+  ngt: Float
+  ngte: Float
+  nin: [Float]
+  nlt: Float
+  nlte: Float
+}
+
+type GuestContext {
+  eventContext: EventContext!
+  eventContextId: UUID!
+  id: UUID!
+  invitedAt: DateTime!
+  respondedAt: DateTime!
+  status: Status!
+  user: UserContext!
+  userid: UUID!
+}
+
+input GuestContextFilterInput {
+  and: [GuestContextFilterInput!]
+  eventContext: EventContextFilterInput
+  eventContextId: UuidOperationFilterInput
+  id: UuidOperationFilterInput
+  invitedAt: DateTimeOperationFilterInput
+  or: [GuestContextFilterInput!]
+  respondedAt: DateTimeOperationFilterInput
+  status: StatusOperationFilterInput
+  user: UserContextFilterInput
+  userid: UuidOperationFilterInput
+}
+
+input GuestContextSortInput {
+  eventContext: EventContextSortInput
+  eventContextId: SortEnumType
+  id: SortEnumType
+  invitedAt: SortEnumType
+  respondedAt: SortEnumType
+  status: SortEnumType
+  user: UserContextSortInput
+  userid: SortEnumType
+}
+
+"""A connection to a list of items."""
+type GuestListConnection {
+  """A list of edges."""
+  edges: [GuestListEdge!]
+
+  """A flattened list of the nodes."""
+  nodes: [GuestContext!]
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+
+"""An edge in a connection."""
+type GuestListEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of the edge."""
+  node: GuestContext!
+}
+
+"""A connection to a list of items."""
+type InvitedEventsConnection {
+  """A list of edges."""
+  edges: [InvitedEventsEdge!]
+
+  """A flattened list of the nodes."""
+  nodes: [EventContext!]
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+
+"""An edge in a connection."""
+type InvitedEventsEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of the edge."""
+  node: EventContext!
+}
+
+input ListDateTimeOperationFilterInput {
+  all: DateTimeOperationFilterInput
+  any: Boolean
+  none: DateTimeOperationFilterInput
+  some: DateTimeOperationFilterInput
+}
+
+input ListFilterInputTypeOfGuestContextFilterInput {
+  all: GuestContextFilterInput
+  any: Boolean
+  none: GuestContextFilterInput
+  some: GuestContextFilterInput
+}
+
+type Mutation {
+  createEvent(input: CreateEventInput!): String!
+  createNotification(input: createNotificationInput!): CallResult!
+  createReminder(input: createReminderInput!): CallResult!
+  deleteEvent(input: DeleteEventInput!): CallResultOfString!
+  deleteReminder(input: deleteReminderInput!): CallResult!
+  deleteUser(input: DeleteUserInput!): CallResult!
+  foo: String!
+  register(input: RegisterInput!): CallResultOfString!
+  updateEvent(input: UpdateEventInput!): CallResultOfString!
+  updateGuestList(input: UpdateGuestListInput!): CallResultOfString!
+  updateName(input: UpdateNameInput!): String!
+  updateProfile(input: UpdateProfileInput!): CallResult!
+  updateReminder(input: updateReminderInput!): CallResult!
+}
+
+"""A connection to a list of items."""
+type MyEventsConnection {
+  """A list of edges."""
+  edges: [MyEventsEdge!]
+
+  """A flattened list of the nodes."""
+  nodes: [EventContext!]
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+
+"""An edge in a connection."""
+type MyEventsEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of the edge."""
+  node: EventContext!
+}
+
+"""A connection to a list of items."""
+type MyRemindersConnection {
+  """A list of edges."""
+  edges: [MyRemindersEdge!]
+
+  """A flattened list of the nodes."""
+  nodes: [ReminderContext!]
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+
+"""An edge in a connection."""
+type MyRemindersEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of the edge."""
+  node: ReminderContext!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+
+  """
+  Indicates whether more edges exist following the set defined by the clients arguments.
+  """
+  hasNextPage: Boolean!
+
+  """
+  Indicates whether more edges exist prior the set defined by the clients arguments.
+  """
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+}
+
+enum Privacy {
+  PRIVATE
+  PUBLIC
+}
+
+input PrivacyOperationFilterInput {
+  eq: Privacy
+  in: [Privacy!]
+  neq: Privacy
+  nin: [Privacy!]
+}
+
+type Query {
+  events(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    id: fetchIdInput!
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [EventContextSortInput!]
+    where: EventContextFilterInput
+  ): ReminderContext!
+  eventsNearMe(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    location: currentLocationInput!
+    order: [EventContextSortInput!]
+    where: EventContextFilterInput
+  ): EventsNearMeConnection
+  fetchUserContext(userId: UUID!): UserContext!
+  fetchUsers(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [UserContextSortInput!]
+    where: UserContextFilterInput
+  ): FetchUsersConnection
+  guestList(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    input: guestListInput!
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [GuestContextSortInput!]
+    where: GuestContextFilterInput
+  ): GuestListConnection
+  invitedEvents(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [EventContextSortInput!]
+    where: EventContextFilterInput
+  ): InvitedEventsConnection
+  myEvents(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [EventContextSortInput!]
+    where: EventContextFilterInput
+  ): MyEventsConnection
+  myReminders(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [ReminderContextSortInput!]
+    userId: UUID!
+    where: ReminderContextFilterInput
+  ): MyRemindersConnection
+  name: String!
+  reminders(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [ReminderContextSortInput!]
+    where: ReminderContextFilterInput
+  ): RemindersConnection
+}
+
+input RegisterInput {
+  email: String!
+  firstName: String!
+  keycloakSub: String!
+  lastName: String!
+}
+
+type ReminderContext {
+  alertTime: [DateTime!]!
+  createdAt: DateTime!
+  eventContext: EventContext!
+  eventContextId: UUID!
+  id: UUID!
+  isCompleted: Boolean!
+  updatedAt: DateTime!
+}
+
+input ReminderContextFilterInput {
+  alertTime: ListDateTimeOperationFilterInput
+  and: [ReminderContextFilterInput!]
+  createdAt: DateTimeOperationFilterInput
+  eventContext: EventContextFilterInput
+  eventContextId: UuidOperationFilterInput
+  id: UuidOperationFilterInput
+  isCompleted: BooleanOperationFilterInput
+  or: [ReminderContextFilterInput!]
+  updatedAt: DateTimeOperationFilterInput
+}
+
+input ReminderContextSortInput {
+  createdAt: SortEnumType
+  eventContext: EventContextSortInput
+  eventContextId: SortEnumType
+  id: SortEnumType
+  isCompleted: SortEnumType
+  updatedAt: SortEnumType
+}
+
+"""A connection to a list of items."""
+type RemindersConnection {
+  """A list of edges."""
+  edges: [RemindersEdge!]
+
+  """A flattened list of the nodes."""
+  nodes: [ReminderContext!]
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+
+"""An edge in a connection."""
+type RemindersEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of the edge."""
+  node: ReminderContext!
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+input RoleOperationFilterInput {
+  eq: Role
+  in: [Role!]
+  neq: Role
+  nin: [Role!]
+}
+
+enum SortEnumType {
+  ASC
+  DESC
+}
+
+enum Status {
+  ACCEPTED
+  CANCELLED
+  DECLINED
+  PENDING
+}
+
+input StatusOperationFilterInput {
+  eq: Status
+  in: [Status!]
+  neq: Status
+  nin: [Status!]
+}
+
+input StringOperationFilterInput {
+  and: [StringOperationFilterInput!]
+  contains: String
+  endsWith: String
+  eq: String
+  in: [String]
+  ncontains: String
+  nendsWith: String
+  neq: String
+  nin: [String]
+  nstartsWith: String
+  or: [StringOperationFilterInput!]
+  startsWith: String
+}
+
+"""
+The `UUID` scalar type represents a Universally Unique Identifier (UUID) as defined by RFC 9562.
+"""
+scalar UUID
+
+input UpdateEventInput {
+  date: DateTime
+  description: String
+  eventId: String!
+  eventLocation: EventLocationInput
+  imageUrl: String
+  locationName: String
+  name: String
+  privacy: Privacy
+}
+
+input UpdateGuestListInput {
+  eventId: UUID!
+  guestListIds: [UUID!]!
+}
+
+input UpdateNameInput {
+  newName: String!
+}
+
+input UpdateProfileInput {
+  firstName: String
+  lastName: String
+  phoneNumber: String
+  profilePictureUrl: String
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+type UserContext {
+  created_at: DateTime!
+  email: String!
+  firstname: String!
+  id: UUID!
+  keycloakSub: String!
+  lastname: String!
+  phoneNumber: String
+  profilePictureUrl: String
+  role: Role!
+  updated_at: DateTime!
+}
+
+input UserContextFilterInput {
+  and: [UserContextFilterInput!]
+  created_at: DateTimeOperationFilterInput
+  email: StringOperationFilterInput
+  firstname: StringOperationFilterInput
+  id: UuidOperationFilterInput
+  keycloakSub: StringOperationFilterInput
+  lastname: StringOperationFilterInput
+  or: [UserContextFilterInput!]
+  phoneNumber: StringOperationFilterInput
+  profilePictureUrl: StringOperationFilterInput
+  role: RoleOperationFilterInput
+  updated_at: DateTimeOperationFilterInput
+}
+
+input UserContextSortInput {
+  created_at: SortEnumType
+  email: SortEnumType
+  firstname: SortEnumType
+  id: SortEnumType
+  keycloakSub: SortEnumType
+  lastname: SortEnumType
+  phoneNumber: SortEnumType
+  profilePictureUrl: SortEnumType
+  role: SortEnumType
+  updated_at: SortEnumType
+}
+
+input UuidOperationFilterInput {
+  eq: UUID
+  gt: UUID
+  gte: UUID
+  in: [UUID]
+  lt: UUID
+  lte: UUID
+  neq: UUID
+  ngt: UUID
+  ngte: UUID
+  nin: [UUID]
+  nlt: UUID
+  nlte: UUID
+}
+
+input createNotificationInput {
+  eventId: UUID!
+  message: String!
+  title: String!
+}
+
+input createReminderInput {
+  alertTimes: [DateTime!]!
+  description: String!
+  eventId: UUID!
+  title: String!
+}
+
+input currentLocationInput {
+  location: EventLocationInput!
+}
+
+input deleteReminderInput {
+  reminderId: UUID!
+}
+
+input fetchIdInput {
+  id: String!
+}
+
+input guestListInput {
+  eventId: UUID!
+}
+
+input updateReminderInput {
+  alertTimes: [DateTime!]!
+  description: String
+  eventId: UUID!
+  title: String
+}

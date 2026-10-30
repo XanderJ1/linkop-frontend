@@ -1,0 +1,15 @@
+query FetchMe($sub: String!) {
+	fetchUsers(where: { keycloakSub: { eq: $sub } }, first: 1) {
+		nodes {
+			id
+			keycloakSub
+			firstname
+			lastname
+			email
+			role
+			phoneNumber
+			profilePictureUrl
+			created_at
+		}
+	}
+}

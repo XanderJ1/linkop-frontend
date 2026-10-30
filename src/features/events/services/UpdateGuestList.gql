@@ -1,0 +1,7 @@
+mutation UpdateGuestList($input: UpdateGuestListInput!) {
+	updateGuestList(input: $input) {
+		success
+		message
+		code
+	}
+}

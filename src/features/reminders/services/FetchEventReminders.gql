@@ -1,0 +1,10 @@
+query FetchEventReminders($eventId: UUID!) {
+	reminders(where: { eventContextId: { eq: $eventId } }, first: 50, order: [{ createdAt: ASC }]) {
+		nodes {
+			id
+			alertTime
+			isCompleted
+			createdAt
+		}
+	}
+}

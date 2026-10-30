@@ -1,0 +1,80 @@
+# There is no event-by-id query on the backend yet, so the event is looked up
+# in both lists the current user can see.
+query FetchEvent($id: UUID!) {
+	hosting: myEvents(where: { id: { eq: $id } }, first: 1) {
+		nodes {
+			id
+			eventName
+			eventDescription
+			eventDate
+			locationName
+			privacy
+			eventLocation {
+				id
+				latitude
+				longitude
+			}
+			pictureUrl
+			category
+			creatorId
+			creator {
+				id
+				firstname
+				lastname
+				email
+				profilePictureUrl
+			}
+			guests {
+				id
+				userid
+				status
+				invitedAt
+				user {
+					id
+					firstname
+					lastname
+					email
+					profilePictureUrl
+				}
+			}
+		}
+	}
+	invited: invitedEvents(where: { id: { eq: $id } }, first: 1) {
+		nodes {
+			id
+			eventName
+			eventDescription
+			eventDate
+			locationName
+			privacy
+			eventLocation {
+				id
+				latitude
+				longitude
+			}
+			pictureUrl
+			category
+			creatorId
+			creator {
+				id
+				firstname
+				lastname
+				email
+				profilePictureUrl
+			}
+			guests {
+				id
+				userid
+				status
+				invitedAt
+				user {
+					id
+					firstname
+					lastname
+					email
+					profilePictureUrl
+				}
+			}
+		}
+	}
+}

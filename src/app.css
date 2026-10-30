@@ -1,0 +1,171 @@
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/forms';
+
+@source '../lib';
+@source '../routes';
+@source '../components';
+@source '../features';
+
+@theme {
+	--font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+	--font-display: 'Bricolage Grotesque Variable', 'Inter Variable', sans-serif;
+
+	/* BRAND COLORS */
+	--color-lo-ink: #17112b;
+	--color-lo-white: #ffffff;
+	--color-lo-page: #f5f1ec;
+
+	--color-lo-violet: #6c3cf5;
+	--color-lo-violet-deep: #4a22c4;
+	--color-lo-coral: #ff6a55;
+	--color-lo-sun: #ffb21f;
+	--color-lo-lime: #c9f24c;
+	--color-lo-sky: #3a7bff;
+	--color-lo-mint: #1fc29a;
+	--color-lo-pink: #ff4fa3;
+
+	/* Warm neutrals */
+	--color-lo-mute-50: #faf8f6;
+	--color-lo-mute-100: #f1ede8;
+	--color-lo-mute-200: #e6e0d9;
+	--color-lo-mute-300: #cbc3ba;
+	--color-lo-mute-400: #a39a91;
+	--color-lo-mute-500: #7a7169;
+	--color-lo-mute-600: #5b534c;
+	--color-lo-mute-700: #433c37;
+	--color-lo-mute-800: #2b2622;
+	--color-lo-mute-900: #1a1613;
+
+	--sidebar-width: 244px;
+	--sidebar-collapsed-width: 76px;
+	--navbar-height: 64px;
+	--layout-gap: 8px;
+	--layout-radius: 18px;
+
+	--animate-float: float 7s ease-in-out infinite;
+	--animate-float-slow: float 11s ease-in-out infinite;
+	--animate-rise: rise 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes float {
+	0%,
+	100% {
+		transform: translate(0, 0) scale(1);
+	}
+	50% {
+		transform: translate(12px, -14px) scale(1.06);
+	}
+}
+
+@keyframes rise {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@layer base {
+	html,
+	body {
+		@apply bg-lo-page font-sans text-lo-ink antialiased;
+		letter-spacing: -0.01em;
+	}
+
+	h1,
+	h2,
+	h3,
+	.font-display {
+		font-family: var(--font-display);
+		letter-spacing: -0.03em;
+	}
+
+	* {
+		@apply box-border;
+	}
+
+	::selection {
+		@apply bg-lo-lime text-lo-ink;
+	}
+
+	::-webkit-scrollbar {
+		width: 5px;
+	}
+
+	::-webkit-scrollbar-track {
+		@apply bg-transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		@apply rounded-full bg-lo-mute-300;
+	}
+
+	:focus-visible {
+		@apply outline-2 outline-offset-2 outline-lo-violet;
+	}
+}
+
+@layer components {
+	/* Shared form field look used by every form in the app */
+	.lo-input {
+		@apply w-full rounded-xl border border-lo-mute-200 bg-lo-white px-3.5 py-2.5 text-sm text-lo-ink transition-colors placeholder:text-lo-mute-400 focus:border-lo-violet focus:ring-4 focus:ring-lo-violet/12 focus:outline-none;
+	}
+
+	.lo-label {
+		@apply mb-1.5 block text-[13px] font-semibold text-lo-mute-800;
+	}
+
+	.lo-card {
+		@apply rounded-3xl border border-lo-mute-200/70 bg-lo-white;
+	}
+
+	/* Signature violet → pink → coral gradient, slides on hover */
+	.btn-vibe {
+		background-image: linear-gradient(110deg, #6c3cf5, #ff4fa3 55%, #ff6a55);
+		background-size: 180% 100%;
+		background-position: 0% 0%;
+		transition:
+			background-position 0.5s ease,
+			transform 0.1s ease,
+			box-shadow 0.2s ease;
+	}
+
+	.btn-vibe:hover {
+		background-position: 100% 0%;
+		box-shadow: 0 14px 30px -12px rgba(255, 79, 163, 0.85);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+/* Toast-Notification */
+[data-sonner-toast] [data-close-button] {
+	position: absolute !important;
+	top: 8px !important;
+	right: 8px !important;
+	left: auto !important;
+	transform: none !important;
+	background: transparent !important;
+	border: none !important;
+	color: #a39a91 !important;
+}
+
+[data-sonner-toast][data-type='success'] [data-icon] {
+	color: #1fc29a !important;
+}
+
+[data-sonner-toast][data-type='error'] [data-icon] {
+	color: #ff6a55 !important;
+}

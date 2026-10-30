@@ -1,0 +1,7 @@
+mutation DeleteReminder($input: deleteReminderInput!) {
+	deleteReminder(input: $input) {
+		success
+		message
+		code
+	}
+}

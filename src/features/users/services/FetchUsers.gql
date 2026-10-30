@@ -1,0 +1,16 @@
+query FetchUsers {
+	fetchUsers(first: 200, order: [{ firstname: ASC }]) {
+		totalCount
+		nodes {
+			id
+			keycloakSub
+			firstname
+			lastname
+			email
+			role
+			phoneNumber
+			profilePictureUrl
+			created_at
+		}
+	}
+}

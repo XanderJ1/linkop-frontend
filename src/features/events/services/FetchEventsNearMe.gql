@@ -1,0 +1,25 @@
+query FetchEventsNearMe($location: currentLocationInput!) {
+	eventsNearMe(location: $location, first: 100, order: [{ eventDate: ASC }]) {
+		nodes {
+			id
+			eventName
+			eventDescription
+			eventDate
+			locationName
+			privacy
+			pictureUrl
+			category
+			creatorId
+			creator {
+				id
+				firstname
+				lastname
+				profilePictureUrl
+			}
+			guests {
+				id
+				status
+			}
+		}
+	}
+}

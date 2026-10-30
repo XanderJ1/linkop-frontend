@@ -1,0 +1,20 @@
+query FetchMyEvents {
+	myEvents(first: 100, order: [{ eventDate: ASC }]) {
+		totalCount
+		nodes {
+			id
+			eventName
+			eventDescription
+			eventDate
+			locationName
+			privacy
+			pictureUrl
+			category
+			creatorId
+			guests {
+				id
+				status
+			}
+		}
+	}
+}

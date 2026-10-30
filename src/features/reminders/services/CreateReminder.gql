@@ -1,0 +1,7 @@
+mutation CreateReminder($input: createReminderInput!) {
+	createReminder(input: $input) {
+		success
+		message
+		code
+	}
+}

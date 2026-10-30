@@ -1,0 +1,58 @@
+{
+	"name": "linkop-frontend",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"generate": "houdini generate",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --check . && eslint .",
+		"pull-schema": "node --env-file=.env.development node_modules/houdini/build/cmd-esm/index.js pull-schema && node scripts/strip-reserved-types.js",
+		"format": "prettier --write ."
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"@hugeicons/svelte",
+			"esbuild"
+		]
+	},
+	"devDependencies": {
+		"@eslint/compat": "^2.0.4",
+		"@eslint/js": "^10.0.1",
+		"@sveltejs/adapter-vercel": "^6.3.3",
+		"@sveltejs/kit": "^2.27.0",
+		"@sveltejs/vite-plugin-svelte": "^7.0.0",
+		"@tailwindcss/forms": "^0.5.11",
+		"@tailwindcss/vite": "^4.2.2",
+		"@types/node": "^24",
+		"eslint": "^10.2.0",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-svelte": "^3.17.0",
+		"globals": "^17.4.0",
+		"houdini": "^1.5.10",
+		"houdini-svelte": "^2.1.20",
+		"prettier": "^3.8.1",
+		"prettier-plugin-svelte": "^4.1.0",
+		"prettier-plugin-tailwindcss": "^0.8.0",
+		"svelte": "^5.55.2",
+		"svelte-check": "^4.4.6",
+		"tailwindcss": "^4.2.2",
+		"typescript": "^6.0.2",
+		"typescript-eslint": "^8.58.1",
+		"vite": "^8.0.7"
+	},
+	"dependencies": {
+		"@fontsource-variable/bricolage-grotesque": "^5.2.0",
+		"@fontsource-variable/inter": "^5.2.0",
+		"@hugeicons/core-free-icons": "^4.2.0",
+		"@hugeicons/svelte": "^1.1.2",
+		"keycloak-js": "^26.2.4",
+		"svelte-sonner": "^1.1.1",
+		"zod": "^4.4.3"
+	}
+}
