@@ -10,12 +10,19 @@ let loginStarted = false;
 
 async function getKeycloak() {
 	if (keycloak) return keycloak;
+	const url = import.meta.env.VITE_KEYCLOAK_URL;
+	const realm = import.meta.env.VITE_KEYCLOAK_REALM;
+	const clientId = import.meta.env.VITE_KEYCLOAK_CLIENT_ID;
+	// Without these keycloak-js builds a relative "undefined/protocol/…" URL and
+	// redirects back to this site in an endless loop, so refuse to start instead.
+	if (!url || !realm || !clientId) {
+		console.error(
+			'[Auth] Missing VITE_KEYCLOAK_URL, VITE_KEYCLOAK_REALM or VITE_KEYCLOAK_CLIENT_ID at build time'
+		);
+		return null;
+	}
 	const Keycloak = (await import('keycloak-js')).default;
-	keycloak = new Keycloak({
-		url: import.meta.env.VITE_KEYCLOAK_URL,
-		realm: import.meta.env.VITE_KEYCLOAK_REALM,
-		clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID
-	});
+	keycloak = new Keycloak({ url, realm, clientId });
 	return keycloak;
 }
 
