@@ -17,6 +17,8 @@ Thumbs.db
 .env.*
 !.env.example
 !.env.test
+# Public build config (every VITE_ value ships to the browser anyway)
+!.env.production
 
 # Vite
 vite.config.js.timestamp-*
