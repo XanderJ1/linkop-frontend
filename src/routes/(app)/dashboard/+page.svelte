@@ -11,7 +11,8 @@
 	import StatsCard from '$components/general/StatsCard.svelte';
 	import DashboardHero from '$features/dashboard/components/DashboardHero.svelte';
 	import QuickStart from '$features/dashboard/components/QuickStart.svelte';
-	import UpNextList from '$features/dashboard/components/UpNextList.svelte';
+	import EventListSkeleton from '$features/events/components/EventListSkeleton.svelte';
+	import EventTimeline from '$features/events/components/EventTimeline.svelte';
 	import { goingCount, isUpcoming, type EventSummary } from '$features/events/services/types';
 	import { session } from '$stores/session.store.svelte';
 
@@ -53,48 +54,51 @@
 
 <svelte:head><title>Home · LinkOp</title></svelte:head>
 
-<div class="space-y-6 pb-8">
-	<DashboardHero firstName={session.user?.firstname ?? ''} next={timeline[0] ?? null} />
+<div class="space-y-8">
+	<DashboardHero firstName={session.user?.firstname ?? ''} />
 
-	<div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
-		<StatsCard label="Hosting" value={loading ? '–' : stats.hosting} description="upcoming events">
+	<div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+		<StatsCard label="Hosting" value={loading ? '–' : stats.hosting}>
 			{#snippet icon()}
-				<HugeiconsIcon icon={Calendar03Icon} size={20} color="currentColor" strokeWidth={2} />
+				<HugeiconsIcon icon={Calendar03Icon} size={22} color="currentColor" strokeWidth={1.6} />
 			{/snippet}
 		</StatsCard>
-		<StatsCard
-			label="Invites"
-			value={loading ? '–' : stats.invites}
-			description="waiting for you"
-			accent="bg-lo-lime text-lo-ink"
-		>
+		<StatsCard label="Invites" value={loading ? '–' : stats.invites} accent="text-lo-sky">
 			{#snippet icon()}
-				<HugeiconsIcon icon={Ticket01Icon} size={20} color="currentColor" strokeWidth={2} />
+				<HugeiconsIcon icon={Ticket01Icon} size={22} color="currentColor" strokeWidth={1.6} />
 			{/snippet}
 		</StatsCard>
-		<StatsCard
-			label="Guests going"
-			value={loading ? '–' : stats.going}
-			description="across your events"
-			accent="bg-lo-coral/12 text-lo-coral"
-		>
+		<StatsCard label="Guests going" value={loading ? '–' : stats.going} accent="text-lo-pink">
 			{#snippet icon()}
-				<HugeiconsIcon icon={UserGroupIcon} size={20} color="currentColor" strokeWidth={2} />
+				<HugeiconsIcon icon={UserGroupIcon} size={22} color="currentColor" strokeWidth={1.6} />
 			{/snippet}
 		</StatsCard>
-		<StatsCard
-			label="Awaiting RSVP"
-			value={loading ? '–' : stats.awaiting}
-			description="guests yet to reply"
-			accent="bg-lo-sun/18 text-[#b5760a]"
-		>
+		<StatsCard label="Awaiting RSVP" value={loading ? '–' : stats.awaiting} accent="text-lo-sun">
 			{#snippet icon()}
-				<HugeiconsIcon icon={Mail01Icon} size={20} color="currentColor" strokeWidth={2} />
+				<HugeiconsIcon icon={Mail01Icon} size={22} color="currentColor" strokeWidth={1.6} />
 			{/snippet}
 		</StatsCard>
 	</div>
 
-	<QuickStart />
+	<section>
+		<div class="mb-3 flex items-center justify-between">
+			<h2 class="text-xl font-semibold text-lo-ink">Up next</h2>
+			<a href="/events" class="text-sm text-lo-mute-500 transition-colors hover:text-lo-ink">
+				See all
+			</a>
+		</div>
+		{#if loading}
+			<EventListSkeleton count={2} />
+		{:else if timeline.length === 0}
+			<p class="py-10 text-center text-sm text-lo-mute-500">
+				Nothing scheduled yet. Your calendar is wide open.
+			</p>
+		{:else}
+			<EventTimeline events={timeline.slice(0, 6)} showHost />
+		{/if}
+	</section>
 
-	<UpNextList events={timeline.slice(0, 6)} {loading} />
+	<div class="border-t border-lo-ink/8"></div>
+
+	<QuickStart />
 </div>

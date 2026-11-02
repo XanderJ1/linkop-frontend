@@ -2,19 +2,13 @@
 	import Skeleton from '$components/custom/Skeleton.svelte';
 </script>
 
-<div class="space-y-6">
-	<Skeleton variant="block" height="320px" rounded="32px" />
-	<div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
-		<div class="lo-card space-y-3 p-6">
-			<Skeleton width="30%" />
-			<Skeleton width="90%" />
-			<Skeleton width="80%" />
-			<Skeleton width="60%" />
-		</div>
-		<div class="lo-card space-y-3 p-6">
-			<Skeleton width="50%" />
-			<Skeleton variant="block" height="60px" />
-			<Skeleton width="70%" />
-		</div>
+<div class="grid gap-8 md:grid-cols-[300px_minmax(0,1fr)]">
+	<Skeleton variant="block" height="300px" rounded="16px" />
+	<div class="space-y-4">
+		<Skeleton width="20%" height="20px" />
+		<Skeleton width="80%" height="40px" />
+		<Skeleton width="50%" height="44px" />
+		<Skeleton width="50%" height="44px" />
+		<Skeleton variant="block" height="120px" rounded="12px" />
 	</div>
 </div>

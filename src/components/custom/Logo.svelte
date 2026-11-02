@@ -9,9 +9,9 @@
 	let { wordmark = true, size = 34, tone = 'dark' }: Props = $props();
 </script>
 
-<span class="inline-flex items-center gap-2.5">
+<span class="inline-flex items-center gap-2">
 	<svg width={size} height={size} viewBox="0 0 40 40" fill="none" aria-hidden="true">
-		<rect width="40" height="40" rx="12" fill={tone === 'light' ? '#ffffff' : '#17112b'} />
+		<rect width="40" height="40" rx="12" fill={tone === 'light' ? '#ffffff' : '#131517'} />
 		<circle cx="16" cy="20" r="7.5" stroke="#6c3cf5" stroke-width="4" />
 		<circle cx="24" cy="20" r="7.5" stroke="#ff6a55" stroke-width="4" />
 		<path d="M16 12.5a7.5 7.5 0 0 1 0 15" stroke="#6c3cf5" stroke-width="4" />
@@ -19,10 +19,10 @@
 	</svg>
 	{#if wordmark}
 		<span
-			class="font-display text-[22px] leading-none font-extrabold
+			class="text-lg leading-none font-semibold tracking-tight
 				{tone === 'light' ? 'text-lo-white' : 'text-lo-ink'}"
 		>
-			Link<span class="text-lo-violet">Op</span>
+			LinkOp
 		</span>
 	{/if}
 </span>

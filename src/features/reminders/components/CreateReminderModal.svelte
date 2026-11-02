@@ -159,7 +159,7 @@
 				<div class="mt-3 flex flex-wrap gap-2">
 					{#each alertTimes as t (t)}
 						<span
-							class="flex items-center gap-1.5 rounded-full bg-lo-lime py-1 pr-1.5 pl-3 text-xs font-bold
+							class="flex items-center gap-1.5 rounded-full bg-lo-ink/6 py-1 pr-1.5 pl-3 text-xs font-medium
 								text-lo-ink"
 						>
 							{formatDateTime(t)}
@@ -189,6 +189,6 @@
 
 	{#snippet footer()}
 		<Button variant="secondary" onclick={onclose}>Cancel</Button>
-		<Button variant="vibe" loading={saving} onclick={save}>Schedule reminder</Button>
+		<Button variant="primary" loading={saving} onclick={save}>Schedule reminder</Button>
 	{/snippet}
 </Modal>

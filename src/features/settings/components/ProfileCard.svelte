@@ -49,19 +49,17 @@
 	}
 </script>
 
-<section class="lo-card overflow-hidden">
-	<div class="h-24 bg-[linear-gradient(110deg,#6c3cf5,#ff4fa3_55%,#ff6a55)]"></div>
-	<div class="px-6 pb-6">
-		<div class="-mt-8 flex items-end gap-4">
+<section class="lo-card">
+	<div class="p-6">
+		<div class="flex items-center gap-4">
 			<UserAvatar
 				firstName={session.user?.firstname}
 				lastName={session.user?.lastname}
 				id={session.user?.id}
 				photoUrl={session.user?.profilePictureUrl}
 				size="lg"
-				ring
 			/>
-			<div class="pb-1">
+			<div>
 				<p class="font-display text-xl font-bold">
 					{session.user?.firstname}
 					{session.user?.lastname}

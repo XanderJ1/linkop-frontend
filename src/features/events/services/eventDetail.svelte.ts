@@ -1,5 +1,4 @@
 import { FetchEventStore } from '$houdini';
-import { breadcrumbTitles } from '$stores/breadcrumb.store.svelte';
 import type { EventSummary } from '$features/events/services/types';
 
 /**
@@ -24,7 +23,6 @@ export function createEventDetail() {
 			const invited = result.data?.invited?.nodes?.[0] as EventSummary | undefined;
 			event = hosted ?? invited ?? null;
 			isHost = !!hosted;
-			if (event) breadcrumbTitles[id] = event.eventName;
 		} catch (err) {
 			console.error('[EventDetail] load failed', err);
 			error = "We couldn't load this event.";

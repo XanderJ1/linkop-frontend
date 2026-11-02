@@ -47,7 +47,7 @@
 <div class="space-y-3">
 	<div class="flex items-center justify-between gap-3">
 		<SearchInput bind:value={search} placeholder="Search people" />
-		<span class="shrink-0 rounded-full bg-lo-lime px-3 py-1 text-xs font-bold text-lo-ink">
+		<span class="shrink-0 rounded-full bg-lo-ink/6 px-3 py-1 text-xs font-medium text-lo-mute-700">
 			{selected.length} selected
 		</span>
 	</div>

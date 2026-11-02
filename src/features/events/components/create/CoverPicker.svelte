@@ -47,7 +47,7 @@
 </script>
 
 <div>
-	<div class="grid grid-cols-3 gap-2.5 sm:grid-cols-6">
+	<div class="grid grid-cols-3 gap-2">
 		{#each COVER_PRESETS as preset (preset.id)}
 			{@const selected = value === presetUrl(preset.id)}
 			<button
@@ -55,10 +55,10 @@
 				onclick={() => (value = presetUrl(preset.id))}
 				aria-pressed={selected}
 				aria-label="{preset.name} cover"
-				class="group relative cursor-pointer overflow-hidden rounded-2xl transition-all duration-200
+				class="group relative cursor-pointer overflow-hidden rounded-lg transition-all duration-150
 					{selected
-					? 'ring-[3px] ring-lo-ink ring-offset-2'
-					: 'hover:-translate-y-0.5 hover:ring-2 hover:ring-lo-mute-300 hover:ring-offset-1'}"
+					? 'ring-2 ring-lo-ink ring-offset-2'
+					: 'hover:ring-2 hover:ring-lo-mute-300 hover:ring-offset-1'}"
 			>
 				<EventCover pictureUrl={presetUrl(preset.id)} class="h-16" />
 				{#if selected}
@@ -79,8 +79,8 @@
 		{/each}
 	</div>
 
-	<div class="mt-3 flex flex-col gap-2 sm:flex-row">
-		<div class="relative flex-1">
+	<div class="mt-3 flex flex-wrap gap-2">
+		<div class="relative w-full">
 			<span class="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-lo-mute-400">
 				<HugeiconsIcon icon={Link01Icon} size={15} color="currentColor" strokeWidth={2} />
 			</span>
@@ -88,22 +88,22 @@
 				type="url"
 				bind:value={customUrl}
 				placeholder="…or paste an image link"
-				class="lo-input pl-10 {isCustom ? 'border-lo-violet' : ''}"
+				class="lo-input pl-10 {isCustom ? 'border-lo-ink' : ''}"
 				onkeydown={(e) => e.key === 'Enter' && (e.preventDefault(), applyCustomUrl())}
 			/>
 		</div>
 		<button
 			type="button"
 			onclick={applyCustomUrl}
-			class="cursor-pointer rounded-xl border border-lo-mute-200 bg-lo-white px-4 text-sm font-semibold
-				transition-colors hover:bg-lo-mute-50"
+			class="h-9 flex-1 cursor-pointer rounded-full bg-lo-ink/6 px-4 text-sm font-medium
+				text-lo-mute-800 transition-colors hover:bg-lo-ink/10"
 		>
 			Use link
 		</button>
 		{#if uploadsEnabled}
 			<label
-				class="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-lo-violet/8 px-4
-					py-2.5 text-sm font-semibold text-lo-violet transition-colors hover:bg-lo-violet/14"
+				class="flex h-9 flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-lo-ink/6
+					px-4 text-sm font-medium text-lo-mute-800 transition-colors hover:bg-lo-ink/10"
 			>
 				<HugeiconsIcon icon={Upload04Icon} size={15} color="currentColor" strokeWidth={2} />
 				{uploading ? 'Uploading…' : 'Upload'}

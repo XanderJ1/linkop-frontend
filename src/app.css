@@ -9,53 +9,45 @@
 
 @theme {
 	--font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
-	--font-display: 'Bricolage Grotesque Variable', 'Inter Variable', sans-serif;
+	--font-display: var(--font-sans);
+
+	/* Nothing in the UI goes heavier than semibold */
+	--font-weight-bold: 600;
+	--font-weight-extrabold: 600;
+
+	--radius-xl: 0.625rem;
+	--radius-2xl: 0.75rem;
+	--radius-3xl: 1rem;
 
 	/* BRAND COLORS */
-	--color-lo-ink: #17112b;
+	--color-lo-ink: #131517;
 	--color-lo-white: #ffffff;
-	--color-lo-page: #f5f1ec;
+	--color-lo-page: #f4f5f6;
 
 	--color-lo-violet: #6c3cf5;
-	--color-lo-violet-deep: #4a22c4;
-	--color-lo-coral: #ff6a55;
+	--color-lo-coral: #e5484d;
 	--color-lo-sun: #ffb21f;
 	--color-lo-lime: #c9f24c;
 	--color-lo-sky: #3a7bff;
 	--color-lo-mint: #1fc29a;
-	--color-lo-pink: #ff4fa3;
+	--color-lo-pink: #f31a7c;
 
-	/* Warm neutrals */
-	--color-lo-mute-50: #faf8f6;
-	--color-lo-mute-100: #f1ede8;
-	--color-lo-mute-200: #e6e0d9;
-	--color-lo-mute-300: #cbc3ba;
-	--color-lo-mute-400: #a39a91;
-	--color-lo-mute-500: #7a7169;
-	--color-lo-mute-600: #5b534c;
-	--color-lo-mute-700: #433c37;
-	--color-lo-mute-800: #2b2622;
-	--color-lo-mute-900: #1a1613;
+	/* Cool neutrals */
+	--color-lo-mute-50: #f8f8f9;
+	--color-lo-mute-100: #f0f0f1;
+	--color-lo-mute-200: #e4e4e6;
+	--color-lo-mute-300: #d0d1d4;
+	--color-lo-mute-400: #9a9ca1;
+	--color-lo-mute-500: #737578;
+	--color-lo-mute-600: #5b5d60;
+	--color-lo-mute-700: #404245;
+	--color-lo-mute-800: #2a2b2d;
+	--color-lo-mute-900: #131517;
 
-	--sidebar-width: 244px;
-	--sidebar-collapsed-width: 76px;
-	--navbar-height: 64px;
-	--layout-gap: 8px;
-	--layout-radius: 18px;
+	--shadow-card: 0 1px 3px #00000005, 0 2px 7px #00000008, 0 3px 14px #0000000a;
+	--shadow-card-hover: 0 3px 3px #00000008, 0 8px 7px #0000000a, 0 17px 14px #0000000d;
 
-	--animate-float: float 7s ease-in-out infinite;
-	--animate-float-slow: float 11s ease-in-out infinite;
-	--animate-rise: rise 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-
-@keyframes float {
-	0%,
-	100% {
-		transform: translate(0, 0) scale(1);
-	}
-	50% {
-		transform: translate(12px, -14px) scale(1.06);
-	}
+	--animate-rise: rise 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 @keyframes rise {
@@ -73,15 +65,12 @@
 	html,
 	body {
 		@apply bg-lo-page font-sans text-lo-ink antialiased;
-		letter-spacing: -0.01em;
 	}
 
 	h1,
 	h2,
-	h3,
-	.font-display {
-		font-family: var(--font-display);
-		letter-spacing: -0.03em;
+	h3 {
+		letter-spacing: -0.02em;
 	}
 
 	* {
@@ -89,7 +78,7 @@
 	}
 
 	::selection {
-		@apply bg-lo-lime text-lo-ink;
+		@apply bg-lo-violet/20 text-lo-ink;
 	}
 
 	::-webkit-scrollbar {
@@ -112,31 +101,31 @@
 @layer components {
 	/* Shared form field look used by every form in the app */
 	.lo-input {
-		@apply w-full rounded-xl border border-lo-mute-200 bg-lo-white px-3.5 py-2.5 text-sm text-lo-ink transition-colors placeholder:text-lo-mute-400 focus:border-lo-violet focus:ring-4 focus:ring-lo-violet/12 focus:outline-none;
+		@apply w-full rounded-lg border border-lo-mute-200 bg-lo-white px-3 py-2 text-sm text-lo-ink transition-colors placeholder:text-lo-mute-400 focus:border-lo-ink focus:ring-0 focus:outline-none;
 	}
 
 	.lo-label {
-		@apply mb-1.5 block text-[13px] font-semibold text-lo-mute-800;
+		@apply mb-1.5 block text-[13px] font-medium text-lo-mute-600;
 	}
 
 	.lo-card {
-		@apply rounded-3xl border border-lo-mute-200/70 bg-lo-white;
+		@apply rounded-xl border border-lo-white bg-lo-white/80 shadow-card;
 	}
 
-	/* Signature violet → pink → coral gradient, slides on hover */
-	.btn-vibe {
-		background-image: linear-gradient(110deg, #6c3cf5, #ff4fa3 55%, #ff6a55);
-		background-size: 180% 100%;
-		background-position: 0% 0%;
-		transition:
-			background-position 0.5s ease,
-			transform 0.1s ease,
-			box-shadow 0.2s ease;
+	/* Small heading with a hairline under it: "Hosted by", "About this event" */
+	.lo-section-title {
+		@apply flex items-center justify-between gap-2 border-b border-lo-ink/8 pb-2 text-sm font-medium text-lo-mute-600;
 	}
 
-	.btn-vibe:hover {
-		background-position: 100% 0%;
-		box-shadow: 0 14px 30px -12px rgba(255, 79, 163, 0.85);
+	/* Soft tint behind the top of the page */
+	.lo-wash {
+		@apply pointer-events-none absolute inset-x-0 top-0 -z-10 h-72;
+		background: linear-gradient(180deg, #dbe7fb 0%, #f3eaf4 45%, transparent 100%);
+	}
+
+	.lo-gradient-text {
+		@apply bg-clip-text text-transparent;
+		background-image: linear-gradient(95deg, #6c3cf5, #f31a7c 50%, #ff8a3d);
 	}
 }
 
@@ -159,7 +148,7 @@
 	transform: none !important;
 	background: transparent !important;
 	border: none !important;
-	color: #a39a91 !important;
+	color: #9a9ca1 !important;
 }
 
 [data-sonner-toast][data-type='success'] [data-icon] {
@@ -167,5 +156,5 @@
 }
 
 [data-sonner-toast][data-type='error'] [data-icon] {
-	color: #ff6a55 !important;
+	color: #e5484d !important;
 }

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { HugeiconsIcon } from '@hugeicons/svelte';
-	import { Logout01Icon, UserCircleIcon } from '@hugeicons/core-free-icons';
+	import { Logout01Icon, Settings01Icon } from '@hugeicons/core-free-icons';
 	import { logout } from '$stores/auth.store.svelte';
-	import { resetSession } from '$stores/session.store.svelte';
+	import { resetSession, session } from '$stores/session.store.svelte';
 
 	interface Props {
 		onclose: () => void;
@@ -22,20 +22,28 @@
 ></div>
 
 <div
-	class="absolute bottom-full left-3 right-3 z-50 mb-1 overflow-hidden rounded-2xl border
-		border-lo-mute-200 bg-lo-white shadow-xl"
+	class="absolute top-full right-0 z-50 mt-2 w-60 overflow-hidden rounded-xl border border-lo-ink/6
+		bg-lo-white p-1 shadow-card-hover"
 >
+	<div class="px-3 py-2">
+		<p class="truncate text-sm font-medium text-lo-ink">
+			{session.user?.firstname}
+			{session.user?.lastname}
+		</p>
+		<p class="truncate text-xs text-lo-mute-500">{session.user?.email}</p>
+	</div>
+
+	<div class="my-1 border-t border-lo-ink/6"></div>
+
 	<a
 		href="/settings"
 		onclick={onclose}
-		class="flex items-center gap-3 px-4 py-3 text-sm text-lo-mute-700 transition-colors
-			hover:bg-lo-mute-50 hover:text-lo-ink"
+		class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-lo-mute-700 transition-colors
+			hover:bg-lo-ink/5 hover:text-lo-ink"
 	>
-		<HugeiconsIcon icon={UserCircleIcon} size={18} color="currentColor" strokeWidth={1.8} />
-		<span>My profile</span>
+		<HugeiconsIcon icon={Settings01Icon} size={16} color="currentColor" strokeWidth={2} />
+		<span>Settings</span>
 	</a>
-
-	<div class="mx-3 border-t border-lo-mute-100"></div>
 
 	<button
 		onclick={() => {
@@ -43,10 +51,10 @@
 			resetSession();
 			logout();
 		}}
-		class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-sm text-lo-coral
-			transition-colors hover:bg-lo-coral/6"
+		class="flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-lo-mute-700
+			transition-colors hover:bg-lo-ink/5 hover:text-lo-ink"
 	>
-		<HugeiconsIcon icon={Logout01Icon} size={18} color="currentColor" strokeWidth={1.8} />
+		<HugeiconsIcon icon={Logout01Icon} size={16} color="currentColor" strokeWidth={2} />
 		<span>Log out</span>
 	</button>
 </div>

@@ -29,11 +29,7 @@
 <svelte:head><title>Invites · LinkOp</title></svelte:head>
 
 <div class="space-y-6">
-	<PageHeader
-		eyebrow="You're on the list"
-		title="Invites"
-		description="Events other people want you at."
-	/>
+	<PageHeader title="Invites" description="Events other people want you at." />
 
 	<EventList {events} {loading} showHost>
 		{#snippet empty()}

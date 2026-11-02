@@ -40,7 +40,6 @@
 
 <div class="space-y-6">
 	<PageHeader
-		eyebrow="Admin"
 		title="People"
 		description="{users.length} {users.length === 1 ? 'person has' : 'people have'} joined LinkOp."
 	>

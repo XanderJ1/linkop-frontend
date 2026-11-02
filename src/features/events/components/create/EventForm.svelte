@@ -2,7 +2,7 @@
 	import { untrack } from 'svelte';
 	import Button from '$components/general/Button.svelte';
 	import CoverPicker from '$features/events/components/create/CoverPicker.svelte';
-	import EventPreview from '$features/events/components/create/EventPreview.svelte';
+	import EventCover from '$features/events/components/EventCover.svelte';
 	import LocationPin from '$features/events/components/create/LocationPin.svelte';
 	import PrivacyPicker from '$features/events/components/create/PrivacyPicker.svelte';
 	import { EVENT_TEMPLATES } from '$features/events/components/create/templates';
@@ -81,54 +81,54 @@
 	const minDate = toDatetimeLocalValue(Date.now());
 </script>
 
-<form class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]" onsubmit={handleSubmit} novalidate>
-	<div class="space-y-5">
+<form
+	class="grid gap-x-8 gap-y-6 md:grid-cols-[300px_minmax(0,1fr)]"
+	onsubmit={handleSubmit}
+	novalidate
+>
+	<div class="space-y-4">
+		<EventCover
+			pictureUrl={values.imageUrl}
+			seed={values.name}
+			class="aspect-square w-full rounded-2xl shadow-card-hover"
+		/>
+		<CoverPicker bind:value={values.imageUrl} error={errors.imageUrl} />
+	</div>
+
+	<div class="min-w-0 space-y-4">
 		{#if mode === 'create'}
-			<section class="lo-card p-5 sm:p-6">
-				<h2 class="text-lg font-bold">Start with a vibe</h2>
-				<p class="mt-0.5 text-sm text-lo-mute-500">
-					Pick a starting point, or skip it and write your own.
-				</p>
-				<div class="mt-4 flex flex-wrap gap-2">
-					{#each EVENT_TEMPLATES as t (t.id)}
-						<button
-							type="button"
-							onclick={() => applyTemplate(t.id)}
-							class="flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm
-								font-semibold transition-all duration-200
-								{activeTemplate === t.id
-								? 'border-lo-ink bg-lo-ink text-lo-white'
-								: 'border-lo-mute-200 bg-lo-white text-lo-mute-700 hover:-translate-y-0.5 hover:border-lo-mute-300'}"
-						>
-							<span aria-hidden="true">{t.emoji}</span>
-							{t.label}
-						</button>
-					{/each}
-				</div>
-			</section>
+			<div class="flex flex-wrap gap-1.5">
+				{#each EVENT_TEMPLATES as t (t.id)}
+					<button
+						type="button"
+						onclick={() => applyTemplate(t.id)}
+						class="flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1 text-[13px] font-medium
+							transition-colors duration-150
+							{activeTemplate === t.id
+							? 'bg-lo-ink text-lo-white'
+							: 'bg-lo-ink/6 text-lo-mute-600 hover:bg-lo-ink/10 hover:text-lo-ink'}"
+					>
+						<span aria-hidden="true">{t.emoji}</span>
+						{t.label}
+					</button>
+				{/each}
+			</div>
 		{/if}
 
-		<section class="lo-card p-5 sm:p-6">
-			<h2 class="text-lg font-bold">Cover</h2>
-			<p class="mt-0.5 mb-4 text-sm text-lo-mute-500">This is the first thing your guests see.</p>
-			<CoverPicker bind:value={values.imageUrl} error={errors.imageUrl} />
-		</section>
+		<div>
+			<label for="ev-name" class="sr-only">Event name</label>
+			<input
+				id="ev-name"
+				class="w-full border-0 bg-transparent p-0 text-[2.5rem] leading-tight font-semibold tracking-tight
+					text-lo-ink placeholder:text-lo-mute-300 focus:ring-0 focus:outline-none"
+				placeholder="Event Name"
+				bind:value={values.name}
+				aria-invalid={!!errors.name}
+			/>
+			{#if errors.name}<p class="mt-1 text-xs font-medium text-lo-coral">{errors.name}</p>{/if}
+		</div>
 
-		<section class="lo-card space-y-4 p-5 sm:p-6">
-			<h2 class="text-lg font-bold">The details</h2>
-
-			<div>
-				<label for="ev-name" class="lo-label">Event name</label>
-				<input
-					id="ev-name"
-					class="lo-input text-base! font-semibold"
-					placeholder="Sunday brunch club"
-					bind:value={values.name}
-					aria-invalid={!!errors.name}
-				/>
-				{#if errors.name}<p class="mt-1 text-xs font-medium text-lo-coral">{errors.name}</p>{/if}
-			</div>
-
+		<section class="lo-card space-y-4 p-4">
 			<div class="grid gap-4 sm:grid-cols-2">
 				<div>
 					<label for="ev-date" class="lo-label">Date & time</label>
@@ -158,7 +158,7 @@
 			</div>
 
 			<div>
-				<label for="ev-desc" class="lo-label">What should people know?</label>
+				<label for="ev-desc" class="lo-label">Description</label>
 				<textarea
 					id="ev-desc"
 					rows="5"
@@ -173,11 +173,7 @@
 			</div>
 		</section>
 
-		<section class="lo-card space-y-5 p-5 sm:p-6">
-			<div>
-				<h2 class="text-lg font-bold">Where & who</h2>
-				<p class="mt-0.5 text-sm text-lo-mute-500">Pin the spot and choose who can find it.</p>
-			</div>
+		<section class="lo-card space-y-4 p-4">
 			<LocationPin
 				bind:latitude={values.latitude}
 				bind:longitude={values.longitude}
@@ -187,18 +183,9 @@
 			<PrivacyPicker bind:value={values.privacy} />
 		</section>
 
-		<div class="flex items-center justify-end gap-2.5 pb-6">
-			{#if oncancel}
-				<Button variant="ghost" onclick={oncancel}>Cancel</Button>
-			{/if}
-			<Button variant="vibe" size="lg" type="submit" loading={submitting}>{submitLabel}</Button>
-		</div>
+		<Button size="lg" type="submit" fullWidth loading={submitting}>{submitLabel}</Button>
+		{#if oncancel}
+			<Button variant="ghost" fullWidth onclick={oncancel}>Cancel</Button>
+		{/if}
 	</div>
-
-	<aside class="hidden lg:block">
-		<div class="sticky top-0 space-y-3">
-			<p class="text-xs font-bold tracking-[0.14em] text-lo-mute-400 uppercase">Live preview</p>
-			<EventPreview {values} />
-		</div>
-	</aside>
 </form>

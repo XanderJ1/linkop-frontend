@@ -4,34 +4,22 @@
 </script>
 
 <section>
-	<div class="mb-3 flex items-end justify-between">
-		<div>
-			<h2 class="text-xl font-bold">Pick a vibe</h2>
-			<p class="text-sm text-lo-mute-500">Start from a template and make it yours.</p>
-		</div>
-	</div>
-	<div class="grid grid-cols-2 gap-3 md:grid-cols-4">
-		{#each EVENT_TEMPLATES as t, i (t.id)}
+	<h2 class="mb-3 text-xl font-semibold text-lo-ink">Start from a template</h2>
+	<div class="grid gap-3 sm:grid-cols-2">
+		{#each EVENT_TEMPLATES as t (t.id)}
 			<a
 				href="/events/create?template={t.id}"
-				class="group animate-rise overflow-hidden rounded-3xl transition-transform duration-300
-					hover:-translate-y-1 hover:rotate-[-1deg]"
-				style="animation-delay: {i * 60}ms"
+				class="lo-card flex items-center gap-3 p-3 transition-shadow duration-200 hover:shadow-card-hover"
 			>
-				<EventCover pictureUrl={t.cover} class="h-32">
-					<div class="flex h-full flex-col justify-between p-4">
-						<span
-							class="text-3xl transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12"
-							aria-hidden="true">{t.emoji}</span
-						>
-						<span
-							class="font-display text-lg leading-tight font-bold
-								{t.id === 'happy-hour' ? 'text-lo-ink' : 'text-white drop-shadow'}"
-						>
-							{t.label}
-						</span>
-					</div>
+				<EventCover pictureUrl={t.cover} class="size-11 shrink-0 rounded-lg">
+					<span class="flex h-full items-center justify-center text-lg" aria-hidden="true">
+						{t.emoji}
+					</span>
 				</EventCover>
+				<span class="min-w-0">
+					<span class="block truncate font-medium text-lo-ink">{t.label}</span>
+					<span class="block truncate text-sm text-lo-mute-500">{t.name}</span>
+				</span>
 			</a>
 		{/each}
 	</div>

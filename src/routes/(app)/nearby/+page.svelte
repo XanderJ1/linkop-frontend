@@ -61,11 +61,7 @@
 <svelte:head><title>Nearby · LinkOp</title></svelte:head>
 
 <div class="space-y-6">
-	<PageHeader
-		eyebrow="Around you"
-		title="Nearby"
-		description="See what's happening close to where you are right now."
-	>
+	<PageHeader title="Nearby" description="See what's happening close to where you are right now.">
 		{#snippet actions()}
 			{#if status === 'done'}
 				<Button variant="secondary" onclick={search}>
@@ -94,7 +90,7 @@
 							<HugeiconsIcon icon={Radar01Icon} size={26} color="currentColor" strokeWidth={1.8} />
 						{/snippet}
 						{#snippet actions()}
-							<Button variant="vibe" href="/events/create">Host something here</Button>
+							<Button variant="primary" href="/events/create">Host something here</Button>
 						{/snippet}
 					</EmptyState>
 				{/snippet}
@@ -110,7 +106,7 @@
 				<HugeiconsIcon icon={Radar01Icon} size={26} color="currentColor" strokeWidth={1.8} />
 			{/snippet}
 			{#snippet actions()}
-				<Button variant="vibe" loading={status === 'locating'} onclick={search}>
+				<Button variant="primary" loading={status === 'locating'} onclick={search}>
 					<HugeiconsIcon icon={Gps01Icon} size={15} color="currentColor" strokeWidth={2} />
 					Use my location
 				</Button>

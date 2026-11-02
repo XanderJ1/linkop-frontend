@@ -6,19 +6,14 @@
 	interface Props {
 		category: string | null | undefined;
 		size?: 'xs' | 'sm';
-		/** Frosted look for use on top of covers */
-		glass?: boolean;
 	}
 
-	let { category, size = 'sm', glass = false }: Props = $props();
+	let { category, size = 'sm' }: Props = $props();
 
 	const vibe = $derived(vibeFor(category));
 </script>
 
-<Badge
-	{size}
-	class={glass ? 'bg-lo-white/85 text-lo-ink border-lo-white/60 backdrop-blur' : vibe.pill}
->
+<Badge {size} class={vibe.pill}>
 	{#snippet icon()}
 		<HugeiconsIcon
 			icon={vibe.icon}

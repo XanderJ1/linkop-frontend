@@ -101,6 +101,6 @@
 
 	{#snippet footer()}
 		<Button variant="secondary" onclick={onclose}>Cancel</Button>
-		<Button variant="vibe" loading={sending} onclick={send}>Send it</Button>
+		<Button variant="primary" loading={sending} onclick={send}>Send it</Button>
 	{/snippet}
 </Modal>

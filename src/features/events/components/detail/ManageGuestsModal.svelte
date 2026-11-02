@@ -50,6 +50,6 @@
 
 	{#snippet footer()}
 		<Button variant="secondary" onclick={onclose}>Cancel</Button>
-		<Button variant="vibe" loading={saving} onclick={save}>Save guest list</Button>
+		<Button variant="primary" loading={saving} onclick={save}>Save guest list</Button>
 	{/snippet}
 </Modal>

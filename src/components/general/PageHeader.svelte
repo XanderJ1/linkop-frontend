@@ -4,25 +4,21 @@
 	interface Props {
 		title: string;
 		description?: string;
-		eyebrow?: string;
 		actions?: Snippet;
 	}
 
-	let { title, description, eyebrow, actions }: Props = $props();
+	let { title, description, actions }: Props = $props();
 </script>
 
-<div class="flex flex-wrap items-end justify-between gap-4">
-	<div>
-		{#if eyebrow}
-			<p class="mb-1 text-xs font-bold tracking-[0.14em] text-lo-violet uppercase">{eyebrow}</p>
-		{/if}
-		<h1 class="text-3xl font-bold text-lo-ink">{title}</h1>
+<div class="flex flex-wrap items-center justify-between gap-4">
+	<div class="min-w-0">
+		<h1 class="text-[2rem] leading-tight font-semibold text-lo-ink">{title}</h1>
 		{#if description}
-			<p class="mt-1 text-sm text-lo-mute-500">{description}</p>
+			<p class="mt-1.5 text-base text-lo-mute-500">{description}</p>
 		{/if}
 	</div>
 	{#if actions}
-		<div class="flex items-center gap-2.5">
+		<div class="flex items-center gap-2">
 			{@render actions()}
 		</div>
 	{/if}

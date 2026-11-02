@@ -75,7 +75,7 @@
 	</EmptyState>
 {:else}
 	<div class="space-y-6">
-		<PageHeader eyebrow="Editing" title={detail.event.eventName} />
+		<PageHeader title={detail.event.eventName} />
 
 		<EventForm
 			mode="edit"

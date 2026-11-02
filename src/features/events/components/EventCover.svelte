@@ -7,12 +7,10 @@
 		/** Used to pick a stable fallback cover */
 		seed?: string;
 		class?: string;
-		/** Animate the floating blobs */
-		animated?: boolean;
 		children?: Snippet;
 	}
 
-	let { pictureUrl, seed = '', class: extra = '', animated = false, children }: Props = $props();
+	let { pictureUrl, seed = '', class: extra = '', children }: Props = $props();
 
 	let imageFailed = $state(false);
 
@@ -33,20 +31,17 @@
 			class="absolute inset-0 h-full w-full object-cover"
 			onerror={() => (imageFailed = true)}
 		/>
-		<div
-			class="absolute inset-0 bg-gradient-to-t from-lo-ink/55 via-transparent to-transparent"
-		></div>
 	{:else if cover.preset}
 		<span
-			class="blob top-[-20%] left-[-10%] h-[70%] w-[55%] {animated ? 'animate-float' : ''}"
+			class="blob top-[-20%] left-[-10%] h-[70%] w-[55%]"
 			style="background: {cover.preset.blobs[0]}"
 		></span>
 		<span
-			class="blob right-[-15%] bottom-[-30%] h-[80%] w-[60%] {animated ? 'animate-float-slow' : ''}"
+			class="blob right-[-15%] bottom-[-30%] h-[80%] w-[60%]"
 			style="background: {cover.preset.blobs[1]}"
 		></span>
 		<span
-			class="blob top-[30%] left-[40%] h-[35%] w-[25%] opacity-70 {animated ? 'animate-float' : ''}"
+			class="blob top-[30%] left-[40%] h-[35%] w-[25%] opacity-70"
 			style="background: {cover.preset.blobs[2]}"
 		></span>
 		<div class="dots absolute inset-0"></div>

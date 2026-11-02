@@ -10,8 +10,8 @@
 
 <svelte:head><title>Settings · LinkOp</title></svelte:head>
 
-<div class="max-w-3xl space-y-6 pb-8">
-	<PageHeader eyebrow="You" title="Settings" description="How you show up on LinkOp." />
+<div class="space-y-6">
+	<PageHeader title="Settings" description="How you show up on LinkOp." />
 
 	<ProfileCard />
 

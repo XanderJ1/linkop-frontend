@@ -3,7 +3,6 @@
 	import { page } from '$app/state';
 	import { toast } from 'svelte-sonner';
 	import { CreateEventStore } from '$houdini';
-	import PageHeader from '$components/general/PageHeader.svelte';
 	import EventForm from '$features/events/components/create/EventForm.svelte';
 	import { runMutation } from '$lib/helpers/mutation';
 	import type { EventFormValues } from '$features/events/services/types';
@@ -45,17 +44,11 @@
 
 <svelte:head><title>New event · LinkOp</title></svelte:head>
 
-<div class="space-y-6">
-	<PageHeader
-		eyebrow="Let's plan something"
-		title="Host an event"
-		description="A meetup, a celebration or a sit-down meeting. Set it up, then invite your people."
-	/>
+<h1 class="sr-only">Create an event</h1>
 
-	<EventForm
-		submitLabel="Create event"
-		{templateId}
-		onsubmit={handleCreate}
-		oncancel={() => history.back()}
-	/>
-</div>
+<EventForm
+	submitLabel="Create Event"
+	{templateId}
+	onsubmit={handleCreate}
+	oncancel={() => history.back()}
+/>

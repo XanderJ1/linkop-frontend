@@ -18,28 +18,28 @@ export const CATEGORY_VIBES: Record<EventCategory, CategoryVibe> = {
 		label: 'Party',
 		tagline: 'Music, games, good energy',
 		icon: PartyIcon,
-		pill: 'bg-lo-pink/10 text-lo-pink border-lo-pink/25',
+		pill: 'bg-lo-pink/10 text-lo-pink border-transparent',
 		dot: 'bg-lo-pink'
 	},
 	HAPPY_HOUR: {
 		label: 'Happy hour',
 		tagline: 'Drinks and easy conversation',
 		icon: DrinkIcon,
-		pill: 'bg-lo-sun/15 text-[#b5760a] border-lo-sun/30',
+		pill: 'bg-lo-sun/15 text-[#b5760a] border-transparent',
 		dot: 'bg-lo-sun'
 	},
 	MEETING: {
 		label: 'Meeting',
 		tagline: 'Focused, formal, on the clock',
 		icon: Briefcase01Icon,
-		pill: 'bg-lo-sky/10 text-lo-sky border-lo-sky/25',
+		pill: 'bg-lo-sky/10 text-lo-sky border-transparent',
 		dot: 'bg-lo-sky'
 	},
 	OTHER: {
 		label: 'Meetup',
 		tagline: 'People, ideas, a place to gather',
 		icon: UserGroupIcon,
-		pill: 'bg-lo-mint/12 text-[#128a6c] border-lo-mint/30',
+		pill: 'bg-lo-mint/12 text-[#128a6c] border-transparent',
 		dot: 'bg-lo-mint'
 	}
 };

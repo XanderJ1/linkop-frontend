@@ -30,12 +30,11 @@
 
 <div class="space-y-6">
 	<PageHeader
-		eyebrow="Hosting"
 		title="My events"
 		description="Everything you're putting together, from game nights to board meetings."
 	>
 		{#snippet actions()}
-			<Button variant="vibe" href="/events/create">
+			<Button variant="primary" href="/events/create">
 				<HugeiconsIcon icon={Add01Icon} size={16} color="currentColor" strokeWidth={2.4} />
 				New event
 			</Button>
@@ -57,7 +56,7 @@
 					/>
 				{/snippet}
 				{#snippet actions()}
-					<Button variant="vibe" href="/events/create">Host your first event</Button>
+					<Button variant="primary" href="/events/create">Host your first event</Button>
 				{/snippet}
 			</EmptyState>
 		{/snippet}

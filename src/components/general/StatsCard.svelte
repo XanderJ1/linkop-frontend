@@ -4,34 +4,24 @@
 	interface Props {
 		label: string;
 		value: number | string;
-		description?: string;
-		/** Tailwind classes for the icon tile */
+		/** Tailwind text color for the icon */
 		accent?: string;
 		icon?: Snippet;
 	}
 
-	let {
-		label,
-		value,
-		description,
-		accent = 'bg-lo-violet/10 text-lo-violet',
-		icon
-	}: Props = $props();
+	let { label, value, accent = 'text-lo-violet', icon }: Props = $props();
 </script>
 
-<div class="lo-card flex items-start justify-between gap-3 p-5">
-	<div>
-		<p class="text-[13px] font-semibold text-lo-mute-500">{label}</p>
-		<p class="mt-1 font-display text-4xl font-bold text-lo-ink tabular-nums">
-			{typeof value === 'number' ? value.toLocaleString() : value}
-		</p>
-		{#if description}
-			<p class="mt-1 text-xs text-lo-mute-400">{description}</p>
-		{/if}
-	</div>
+<div class="lo-card flex items-center gap-3 p-3.5">
 	{#if icon}
-		<div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl {accent}">
+		<div class="shrink-0 {accent}">
 			{@render icon()}
 		</div>
 	{/if}
+	<div class="min-w-0">
+		<p class="text-base leading-tight font-medium text-lo-ink tabular-nums">
+			{typeof value === 'number' ? value.toLocaleString() : value}
+		</p>
+		<p class="truncate text-[13px] text-lo-mute-500">{label}</p>
+	</div>
 </div>

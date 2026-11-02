@@ -28,20 +28,20 @@
 			role="radio"
 			aria-checked={active}
 			onclick={() => (value = option.id)}
-			class="flex cursor-pointer items-start gap-3 rounded-2xl border p-3.5 text-left transition-all duration-200
+			class="flex cursor-pointer items-start gap-3 rounded-xl border p-3 text-left transition-colors duration-150
 				{active
-				? 'border-lo-ink bg-lo-ink text-lo-white'
-				: 'border-lo-mute-200 bg-lo-white text-lo-ink hover:-translate-y-0.5 hover:border-lo-mute-300'}"
+				? 'border-lo-ink bg-lo-white text-lo-ink'
+				: 'border-lo-mute-200 bg-lo-white text-lo-ink hover:border-lo-mute-300'}"
 		>
 			<span
 				class="grid size-9 shrink-0 place-items-center rounded-xl
-					{active ? 'bg-lo-lime text-lo-ink' : 'bg-lo-mute-100 text-lo-mute-600'}"
+					{active ? 'bg-lo-ink text-lo-white' : 'bg-lo-mute-100 text-lo-mute-600'}"
 			>
 				<HugeiconsIcon icon={option.icon} size={18} color="currentColor" strokeWidth={2} />
 			</span>
 			<span>
 				<span class="block text-sm font-bold">{option.label}</span>
-				<span class="block text-xs {active ? 'text-lo-white/60' : 'text-lo-mute-500'}">
+				<span class="block text-xs text-lo-mute-500">
 					{option.hint}
 				</span>
 			</span>

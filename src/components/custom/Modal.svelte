@@ -36,14 +36,14 @@
 	<div
 		use:portal
 		transition:fade={{ duration: 150 }}
-		class="fixed inset-0 z-999 flex items-end justify-center bg-lo-ink/45 p-4 backdrop-blur-[3px] sm:items-center"
+		class="fixed inset-0 z-999 flex items-end justify-center bg-lo-ink/30 p-4 backdrop-blur-[2px] sm:items-center"
 		onclick={onclose}
 	>
 		<div
 			transition:fly={{ y: 24, duration: 220 }}
 			class="flex max-h-[90vh] w-full flex-col {sizeClass[
 				size
-			]} rounded-[28px] bg-lo-white shadow-2xl"
+			]} rounded-2xl bg-lo-white shadow-card-hover"
 			onclick={(e) => e.stopPropagation()}
 			role="dialog"
 			tabindex="-1"
@@ -53,7 +53,7 @@
 			{#if title}
 				<div class="flex items-start justify-between gap-4 px-6 pt-6">
 					<div>
-						<h2 class="text-xl font-bold text-lo-ink">{title}</h2>
+						<h2 class="text-lg font-semibold text-lo-ink">{title}</h2>
 						{#if description}
 							<p class="mt-1 text-sm text-lo-mute-500">{description}</p>
 						{/if}
@@ -74,7 +74,7 @@
 			</div>
 
 			{#if footer}
-				<div class="flex justify-end gap-2.5 border-t border-lo-mute-100 px-6 py-4">
+				<div class="flex justify-end gap-2.5 border-t border-lo-ink/6 px-6 py-4">
 					{@render footer()}
 				</div>
 			{/if}

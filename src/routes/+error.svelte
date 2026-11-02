@@ -9,21 +9,14 @@
 </script>
 
 <div
-	class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-lo-page px-6
+	class="relative isolate flex min-h-screen flex-col items-center justify-center overflow-hidden px-6
 		text-center"
 >
-	<div
-		class="pointer-events-none absolute top-1/4 left-1/3 h-72 w-72 animate-float rounded-full
-			bg-lo-violet/20 blur-3xl"
-	></div>
-	<div
-		class="pointer-events-none absolute right-1/4 bottom-1/4 h-64 w-64 animate-float-slow
-			rounded-full bg-lo-coral/20 blur-3xl"
-	></div>
+	<div class="lo-wash"></div>
 
 	<div class="relative">
 		<Logo />
-		<p class="mt-10 font-display text-8xl font-extrabold text-lo-ink">{page.status}</p>
+		<p class="mt-10 text-7xl font-semibold text-lo-mute-300">{page.status}</p>
 		<h1 class="mt-3 text-2xl font-bold text-lo-ink">
 			{isNotFound ? 'This party moved.' : 'Something went sideways.'}
 		</h1>
@@ -38,7 +31,7 @@
 				<HugeiconsIcon icon={ArrowLeft02Icon} size={15} color="currentColor" strokeWidth={2} />
 				Go back
 			</Button>
-			<Button variant="vibe" href="/dashboard">
+			<Button variant="primary" href="/dashboard">
 				<HugeiconsIcon icon={Home01Icon} size={15} color="currentColor" strokeWidth={2} />
 				Take me home
 			</Button>

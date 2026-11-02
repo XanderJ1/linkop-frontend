@@ -35,12 +35,9 @@
 	});
 </script>
 
-<div
-	class="relative inline-flex items-center gap-1 rounded-full bg-lo-mute-200/70 p-1"
-	role="tablist"
->
+<div class="relative inline-flex items-center gap-0.5 rounded-lg bg-lo-ink/6 p-0.5" role="tablist">
 	<span
-		class="absolute top-1 bottom-1 rounded-full bg-lo-ink transition-all duration-300 ease-out"
+		class="absolute top-0.5 bottom-0.5 rounded-md bg-lo-white shadow-card transition-all duration-200 ease-out"
 		style={pillStyle}
 	></span>
 
@@ -51,19 +48,16 @@
 			aria-selected={activeTab === tab.id}
 			bind:this={tabRefs[tab.id]}
 			onclick={() => (activeTab = tab.id)}
-			class="relative z-10 flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-sm
-				font-semibold transition-colors duration-150
-				{activeTab === tab.id ? 'text-lo-white' : 'text-lo-mute-600 hover:text-lo-ink'}"
+			class="relative z-10 flex cursor-pointer items-center gap-2 rounded-md px-3 py-1.5 text-sm
+				font-medium transition-colors duration-150
+				{activeTab === tab.id ? 'text-lo-ink' : 'text-lo-mute-500 hover:text-lo-ink'}"
 		>
 			{#if tab.icon}
 				<HugeiconsIcon icon={tab.icon} size={15} color="currentColor" strokeWidth={2} />
 			{/if}
 			{tab.label}
 			{#if counts[tab.id] !== undefined}
-				<span
-					class="rounded-full px-1.5 py-0.5 text-[10px] font-bold tabular-nums
-						{activeTab === tab.id ? 'bg-lo-lime text-lo-ink' : 'bg-lo-white text-lo-mute-600'}"
-				>
+				<span class="text-xs text-lo-mute-400 tabular-nums">
 					{counts[tab.id]}
 				</span>
 			{/if}

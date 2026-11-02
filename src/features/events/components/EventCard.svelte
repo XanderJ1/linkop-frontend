@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { HugeiconsIcon } from '@hugeicons/svelte';
-	import { Location01Icon, UserGroupIcon } from '@hugeicons/core-free-icons';
+	import { Location01Icon } from '@hugeicons/core-free-icons';
+	import Badge from '$components/general/Badge.svelte';
 	import EventCover from '$features/events/components/EventCover.svelte';
 	import CategoryBadge from '$features/events/components/CategoryBadge.svelte';
 	import UserAvatar from '$features/users/components/UserAvatar.svelte';
@@ -9,79 +10,67 @@
 
 	interface Props {
 		event: EventSummary;
-		/** Shows "Hosted by …" instead of the guest count */
+		/** Shows "By …" instead of the guest count */
 		showHost?: boolean;
+		role?: 'hosting' | 'invited';
 		index?: number;
 	}
 
-	let { event, showHost = false, index = 0 }: Props = $props();
+	let { event, showHost = false, role, index = 0 }: Props = $props();
 
-	const date = $derived(new Date(event.eventDate));
-	const month = $derived(date.toLocaleString('en-US', { month: 'short' }).toUpperCase());
-	const day = $derived(date.getDate());
-	const weekday = $derived(date.toLocaleString('en-US', { weekday: 'short' }));
 	const past = $derived(!isUpcoming(event));
 	const going = $derived(goingCount(event));
 </script>
 
 <a
 	href="/events/{event.id}"
-	class="group flex animate-rise flex-col overflow-hidden rounded-[26px] border border-lo-mute-200/70
-		bg-lo-white transition-all duration-300 hover:-translate-y-1
-		hover:shadow-[0_22px_40px_-22px_rgba(23,17,43,0.45)] {past ? 'opacity-70' : ''}"
-	style="animation-delay: {Math.min(index, 8) * 50}ms"
+	class="lo-card flex animate-rise gap-4 p-3.5 transition-shadow duration-200 hover:shadow-card-hover
+		sm:p-4"
+	style="animation-delay: {Math.min(index, 8) * 40}ms"
 >
-	<EventCover
-		pictureUrl={event.pictureUrl}
-		seed={event.id}
-		class="h-40 transition-transform duration-500"
-	>
-		<div class="flex h-full items-start justify-between p-3.5">
-			<CategoryBadge category={event.category} size="xs" glass />
-			<div
-				class="flex w-13 flex-col items-center rounded-2xl bg-lo-white py-1.5 shadow-lg
-					transition-transform duration-300 group-hover:-rotate-6"
-			>
-				<span class="text-[10px] font-bold tracking-wider text-lo-coral">{month}</span>
-				<span class="font-display text-2xl leading-none font-extrabold text-lo-ink">{day}</span>
-			</div>
-		</div>
-	</EventCover>
-
-	<div class="flex flex-1 flex-col gap-2 p-4">
-		<p class="text-xs font-semibold text-lo-violet">
-			{weekday} · {formatTime(event.eventDate)}
-			{#if past}<span class="text-lo-mute-400"> · Ended</span>{/if}
+	<div class="min-w-0 flex-1">
+		<p class="text-sm text-lo-mute-500">
+			{formatTime(event.eventDate)}
+			{#if past}<span> · Ended</span>{/if}
 		</p>
-		<h3 class="line-clamp-2 text-lg leading-snug font-bold text-lo-ink">{event.eventName}</h3>
-		<p class="flex items-center gap-1.5 truncate text-[13px] text-lo-mute-500">
-			<HugeiconsIcon icon={Location01Icon} size={14} color="currentColor" strokeWidth={1.8} />
+		<h3 class="mt-0.5 line-clamp-2 text-lg leading-snug font-medium text-lo-ink">
+			{event.eventName}
+		</h3>
+
+		{#if showHost && event.creator}
+			<p class="mt-1.5 flex items-center gap-1.5 truncate text-sm text-lo-mute-500">
+				<UserAvatar
+					firstName={event.creator.firstname}
+					lastName={event.creator.lastname}
+					id={event.creator.id}
+					photoUrl={event.creator.profilePictureUrl}
+					size="xs"
+				/>
+				<span class="truncate">By {event.creator.firstname} {event.creator.lastname}</span>
+			</p>
+		{/if}
+
+		<p class="mt-1 flex items-center gap-1.5 text-sm text-lo-mute-500">
+			<HugeiconsIcon icon={Location01Icon} size={14} color="currentColor" strokeWidth={2} />
 			<span class="truncate">{event.locationName}</span>
 		</p>
 
-		<div class="mt-auto flex items-center justify-between pt-2">
-			{#if showHost && event.creator}
-				<span class="flex items-center gap-2 text-xs text-lo-mute-500">
-					<UserAvatar
-						firstName={event.creator.firstname}
-						lastName={event.creator.lastname}
-						id={event.creator.id}
-						photoUrl={event.creator.profilePictureUrl}
-						size="xs"
-					/>
-					Hosted by {event.creator.firstname}
-				</span>
-			{:else}
-				<span class="flex items-center gap-1.5 text-xs font-medium text-lo-mute-500">
-					<HugeiconsIcon icon={UserGroupIcon} size={14} color="currentColor" strokeWidth={1.8} />
-					{event.guests.length} invited · {going} going
-				</span>
+		<div class="mt-2.5 flex flex-wrap items-center gap-1.5">
+			{#if role}
+				<Badge size="xs" variant={role === 'hosting' ? 'strong' : 'violet'}>
+					{role === 'hosting' ? 'Hosting' : 'Invited'}
+				</Badge>
 			{/if}
-			<span
-				class="flex h-8 w-8 items-center justify-center rounded-full bg-lo-mute-100 text-lo-ink
-					transition-all duration-300 group-hover:bg-lo-lime"
-				aria-hidden="true">→</span
-			>
+			<CategoryBadge category={event.category} size="xs" />
+			{#if !showHost}
+				<span class="text-xs text-lo-mute-500">{event.guests.length} invited · {going} going</span>
+			{/if}
 		</div>
 	</div>
+
+	<EventCover
+		pictureUrl={event.pictureUrl}
+		seed={event.id}
+		class="size-22 shrink-0 rounded-lg sm:size-28"
+	/>
 </a>

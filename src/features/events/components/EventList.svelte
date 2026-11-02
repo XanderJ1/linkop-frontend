@@ -2,8 +2,8 @@
 	import type { Snippet } from 'svelte';
 	import Tabs from '$components/custom/Tabs.svelte';
 	import SearchInput from '$components/general/SearchInput.svelte';
-	import EventCard from '$features/events/components/EventCard.svelte';
-	import EventGridSkeleton from '$features/events/components/EventGridSkeleton.svelte';
+	import EventListSkeleton from '$features/events/components/EventListSkeleton.svelte';
+	import EventTimeline from '$features/events/components/EventTimeline.svelte';
 	import { isUpcoming, type EventSummary } from '$features/events/services/types';
 
 	interface Props {
@@ -34,7 +34,7 @@
 </script>
 
 {#if loading}
-	<EventGridSkeleton />
+	<EventListSkeleton />
 {:else if events.length === 0}
 	{@render empty()}
 {:else}
@@ -51,7 +51,7 @@
 	</div>
 
 	{#if visible.length === 0}
-		<p class="rounded-3xl bg-lo-white/60 py-14 text-center text-sm text-lo-mute-500">
+		<p class="py-14 text-center text-sm text-lo-mute-500">
 			{search
 				? `Nothing matches "${search}".`
 				: activeTab === 'upcoming'
@@ -59,10 +59,6 @@
 					: 'No past events yet.'}
 		</p>
 	{:else}
-		<div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-			{#each visible as event, i (event.id)}
-				<EventCard {event} {showHost} index={i} />
-			{/each}
-		</div>
+		<EventTimeline events={visible} {showHost} />
 	{/if}
 {/if}

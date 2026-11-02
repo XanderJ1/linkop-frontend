@@ -10,6 +10,8 @@
 	} from '@hugeicons/core-free-icons';
 	import Button from '$components/general/Button.svelte';
 	import EmptyState from '$components/general/EmptyState.svelte';
+	import Countdown from '$features/events/components/Countdown.svelte';
+	import EventCover from '$features/events/components/EventCover.svelte';
 	import EventDetailHeader from '$features/events/components/detail/EventDetailHeader.svelte';
 	import EventDetailSkeleton from '$features/events/components/detail/EventDetailSkeleton.svelte';
 	import GuestList from '$features/events/components/detail/GuestList.svelte';
@@ -19,7 +21,7 @@
 	import EventReminders from '$features/reminders/components/EventReminders.svelte';
 	import UserAvatar from '$features/users/components/UserAvatar.svelte';
 	import { createEventDetail } from '$features/events/services/eventDetail.svelte';
-	import { isUpcoming } from '$features/events/services/types';
+	import { isUpcoming, relativeWhen } from '$features/events/services/types';
 	import { session } from '$stores/session.store.svelte';
 
 	const detail = createEventDetail();
@@ -55,97 +57,132 @@
 		{/snippet}
 	</EmptyState>
 {:else}
-	<div class="space-y-6 pb-8">
-		<EventDetailHeader {event} isHost={detail.isHost} />
+	<div class="grid gap-x-8 gap-y-6 md:grid-cols-[300px_minmax(0,1fr)] md:grid-rows-[auto_1fr]">
+		<EventCover
+			pictureUrl={event.pictureUrl}
+			seed={event.id}
+			class="aspect-square w-full rounded-2xl shadow-card-hover"
+		/>
 
-		<!-- Action bar -->
-		<div class="flex flex-wrap items-center gap-2.5">
-			{#if detail.isHost}
-				<Button variant="primary" href="/events/{event.id}/edit">
-					<HugeiconsIcon icon={Edit02Icon} size={15} color="currentColor" strokeWidth={2} />
-					Edit details
-				</Button>
-				<Button variant="secondary" onclick={() => (guestsOpen = true)}>
-					<HugeiconsIcon icon={UserAdd01Icon} size={15} color="currentColor" strokeWidth={2} />
-					Invite people
-				</Button>
-				<Button variant="secondary" onclick={() => (announceOpen = true)}>
-					<HugeiconsIcon icon={Megaphone01Icon} size={15} color="currentColor" strokeWidth={2} />
-					Announce
-				</Button>
-				{#if upcoming}
-					<Button variant="soft" onclick={() => (reminderOpen = true)}>
-						<HugeiconsIcon icon={AlarmClockIcon} size={15} color="currentColor" strokeWidth={2} />
-						Remind guests
-					</Button>
-				{/if}
-			{/if}
+		<div class="min-w-0 space-y-6 md:col-start-2 md:row-span-2 md:row-start-1">
+			<EventDetailHeader {event} />
+
+			<section class="lo-card overflow-hidden">
+				<p
+					class="border-b border-lo-ink/6 bg-lo-ink/3 px-4 py-2 text-sm font-medium text-lo-mute-600"
+				>
+					{#if detail.isHost}
+						You're hosting this event
+					{:else if myInvite}
+						You're on the guest list
+					{:else}
+						Event status
+					{/if}
+				</p>
+				<div class="space-y-4 p-4">
+					{#if upcoming}
+						<Countdown to={event.eventDate} />
+					{:else}
+						<p class="text-sm text-lo-mute-500">Wrapped {relativeWhen(event.eventDate)}</p>
+					{/if}
+
+					{#if detail.isHost}
+						<div class="flex flex-wrap items-center gap-2">
+							<Button href="/events/{event.id}/edit">
+								<HugeiconsIcon icon={Edit02Icon} size={15} color="currentColor" strokeWidth={2} />
+								Edit details
+							</Button>
+							<Button variant="secondary" onclick={() => (guestsOpen = true)}>
+								<HugeiconsIcon
+									icon={UserAdd01Icon}
+									size={15}
+									color="currentColor"
+									strokeWidth={2}
+								/>
+								Invite
+							</Button>
+							<Button variant="secondary" onclick={() => (announceOpen = true)}>
+								<HugeiconsIcon
+									icon={Megaphone01Icon}
+									size={15}
+									color="currentColor"
+									strokeWidth={2}
+								/>
+								Announce
+							</Button>
+							{#if upcoming}
+								<Button variant="secondary" onclick={() => (reminderOpen = true)}>
+									<HugeiconsIcon
+										icon={AlarmClockIcon}
+										size={15}
+										color="currentColor"
+										strokeWidth={2}
+									/>
+									Remind guests
+								</Button>
+							{/if}
+						</div>
+					{:else if myInvite}
+						<div class="flex items-center justify-between gap-3 text-sm text-lo-mute-500">
+							Your RSVP
+							<GuestStatusBadge status={myInvite.status} />
+						</div>
+					{/if}
+				</div>
+			</section>
+
+			<section>
+				<h2 class="lo-section-title">About Event</h2>
+				<p class="mt-3 text-base leading-relaxed whitespace-pre-line text-lo-mute-700">
+					{event.eventDescription}
+				</p>
+			</section>
+
+			<EventReminders
+				eventId={event.id}
+				eventDate={event.eventDate}
+				isHost={detail.isHost}
+				{upcoming}
+				bind:adding={reminderOpen}
+			/>
 		</div>
 
-		<div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-			<div class="space-y-6">
-				<section class="lo-card p-6">
-					<h2 class="text-lg font-bold">About this event</h2>
-					<p class="mt-3 text-[15px] leading-relaxed whitespace-pre-line text-lo-mute-700">
-						{event.eventDescription}
-					</p>
-				</section>
-
-				{#if event.creator}
-					<section class="lo-card flex items-center gap-4 p-5">
+		<aside class="min-w-0 space-y-6">
+			{#if event.creator}
+				<section>
+					<h2 class="lo-section-title">Hosted By</h2>
+					<div class="mt-3 flex items-center gap-2.5">
 						<UserAvatar
 							firstName={event.creator.firstname}
 							lastName={event.creator.lastname}
 							id={event.creator.id}
 							photoUrl={event.creator.profilePictureUrl}
-							size="lg"
+							size="xs"
 						/>
-						<div class="min-w-0 flex-1">
-							<p class="text-xs font-bold tracking-[0.14em] text-lo-mute-400 uppercase">
-								Hosted by
-							</p>
-							<p class="truncate font-display text-xl font-bold">
+						<div class="min-w-0">
+							<p class="truncate text-sm font-medium text-lo-ink">
 								{event.creator.firstname}
 								{event.creator.lastname}
 							</p>
 							{#if event.creator.email}
 								<a
 									href="mailto:{event.creator.email}"
-									class="text-sm text-lo-violet hover:underline">{event.creator.email}</a
+									class="block truncate text-xs text-lo-mute-500 hover:text-lo-ink"
 								>
+									{event.creator.email}
+								</a>
 							{/if}
 						</div>
-					</section>
-				{/if}
+					</div>
+				</section>
+			{/if}
 
-				{#if !detail.isHost && myInvite}
-					<section
-						class="flex flex-wrap items-center justify-between gap-3 rounded-3xl bg-lo-ink p-5 text-lo-white"
-					>
-						<div>
-							<p class="font-display text-lg font-bold">You're on the guest list</p>
-							<p class="text-sm text-lo-white/60">Your RSVP status for this event</p>
-						</div>
-						<GuestStatusBadge status={myInvite.status} />
-					</section>
-				{/if}
-			</div>
-
-			<div class="space-y-6">
-				<GuestList
-					guests={event.guests}
-					isHost={detail.isHost}
-					onmanage={() => (guestsOpen = true)}
-				/>
-				<EventReminders
-					eventId={event.id}
-					eventDate={event.eventDate}
-					isHost={detail.isHost}
-					{upcoming}
-					bind:adding={reminderOpen}
-				/>
-			</div>
-		</div>
+			<GuestList
+				guests={event.guests}
+				isHost={detail.isHost}
+				onmanage={() => (guestsOpen = true)}
+			/>
+		</aside>
 	</div>
 
 	{#if detail.isHost}
