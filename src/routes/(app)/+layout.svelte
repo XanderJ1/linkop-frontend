@@ -6,7 +6,7 @@
 	import Navbar from '$components/layout/Navbar.svelte';
 	import AppLoader from '$components/custom/AppLoader.svelte';
 	import Button from '$components/general/Button.svelte';
-	import { auth, login } from '$stores/auth.store.svelte';
+	import { auth, login, logout } from '$stores/auth.store.svelte';
 	import { session, syncSession, resetSession } from '$stores/session.store.svelte';
 	import { breadcrumbTitles } from '$stores/breadcrumb.store.svelte';
 
@@ -89,7 +89,10 @@
 			{session.error ?? 'Something went wrong while loading your profile.'} Make sure the LinkOp API is
 			running, then try again.
 		</p>
-		<Button variant="primary" onclick={retry}>Try again</Button>
+		<div class="flex flex-wrap items-center justify-center gap-2.5">
+			<Button variant="primary" onclick={retry}>Try again</Button>
+			<Button variant="secondary" onclick={logout}>Log out</Button>
+		</div>
 	</div>
 {:else}
 	<Sidebar {collapsed} />
