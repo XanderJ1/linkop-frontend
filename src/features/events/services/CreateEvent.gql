@@ -1,3 +1,7 @@
 mutation CreateEvent($input: CreateEventInput!) {
-	createEvent(input: $input)
+	createEvent(input: $input) {
+		success
+		message
+		code
+	}
 }

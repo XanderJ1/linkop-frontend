@@ -22,13 +22,21 @@
 	let saving = $state(false);
 
 	$effect(() => {
-		if (open) selected = [...currentGuestIds];
+		if (open) selected = [];
 	});
 
+	// The backend only adds guests (it has no way to remove one) and rejects
+	// duplicates, so existing guests are locked and only new picks are sent.
+	const newGuestIds = $derived(selected.filter((id) => !currentGuestIds.includes(id)));
+
 	async function save() {
+		if (newGuestIds.length === 0) {
+			onclose();
+			return;
+		}
 		saving = true;
 		const outcome = await runMutation(
-			() => updateStore.mutate({ input: { eventId, guestListIds: selected } }),
+			() => updateStore.mutate({ input: { eventId, guestListIds: newGuestIds } }),
 			(d) => d.updateGuestList,
 			"Couldn't update the guest list"
 		);
@@ -43,13 +51,20 @@
 	}
 </script>
 
-<Modal {open} {onclose} title="Who's coming?" description="Pick the people you want to invite.">
+<Modal
+	{open}
+	{onclose}
+	title="Who's coming?"
+	description="Pick more people to invite. Guests can't be removed once they're invited."
+>
 	{#if open}
-		<UserPicker bind:selected exclude={[hostId]} />
+		<UserPicker bind:selected exclude={[hostId]} locked={currentGuestIds} />
 	{/if}
 
 	{#snippet footer()}
 		<Button variant="secondary" onclick={onclose}>Cancel</Button>
-		<Button variant="primary" loading={saving} onclick={save}>Save guest list</Button>
+		<Button variant="primary" loading={saving} disabled={newGuestIds.length === 0} onclick={save}>
+			{newGuestIds.length > 0 ? `Invite ${newGuestIds.length}` : 'Invite'}
+		</Button>
 	{/snippet}
 </Modal>

@@ -15,7 +15,7 @@
 	import EventDetailHeader from '$features/events/components/detail/EventDetailHeader.svelte';
 	import EventDetailSkeleton from '$features/events/components/detail/EventDetailSkeleton.svelte';
 	import GuestList from '$features/events/components/detail/GuestList.svelte';
-	import GuestStatusBadge from '$features/events/components/detail/GuestStatusBadge.svelte';
+	import InvitationActions from '$features/events/components/detail/InvitationActions.svelte';
 	import ManageGuestsModal from '$features/events/components/detail/ManageGuestsModal.svelte';
 	import AnnounceModal from '$features/notifications/components/AnnounceModal.svelte';
 	import EventReminders from '$features/reminders/components/EventReminders.svelte';
@@ -123,10 +123,11 @@
 							{/if}
 						</div>
 					{:else if myInvite}
-						<div class="flex items-center justify-between gap-3 text-sm text-lo-mute-500">
-							Your RSVP
-							<GuestStatusBadge status={myInvite.status} />
-						</div>
+						<InvitationActions
+							{event}
+							status={myInvite.status}
+							onaccepted={() => detail.load(eventId)}
+						/>
 					{/if}
 				</div>
 			</section>

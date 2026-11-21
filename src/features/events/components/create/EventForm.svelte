@@ -40,6 +40,8 @@
 			name: initial.name ?? '',
 			description: initial.description ?? '',
 			date: initial.date ?? '',
+			endDate:
+				new Date(initial.endDate ?? '') > new Date(initial.date ?? '') ? initial.endDate! : '',
 			location: initial.location ?? '',
 			imageUrl: initial.imageUrl ?? presetUrl('sunset'),
 			privacy: initial.privacy ?? 'PUBLIC',
@@ -67,7 +69,8 @@
 		e.preventDefault();
 		errors = validateEvent(values, {
 			requireFuture: mode === 'create',
-			requirePin: mode === 'create'
+			requirePin: mode === 'create',
+			validateEnd: mode === 'create' || !!values.endDate
 		});
 		if (Object.keys(errors).length) return;
 		submitting = true;
@@ -92,7 +95,12 @@
 			seed={values.name}
 			class="aspect-square w-full rounded-2xl shadow-card-hover"
 		/>
-		<CoverPicker bind:value={values.imageUrl} error={errors.imageUrl} />
+		<!-- The backend's updateEvent ignores the cover and privacy, so they're set once at creation -->
+		{#if mode === 'create'}
+			<CoverPicker bind:value={values.imageUrl} error={errors.imageUrl} />
+		{:else}
+			<p class="text-xs text-lo-mute-500">The cover and privacy can't be changed after creation.</p>
+		{/if}
 	</div>
 
 	<div class="min-w-0 space-y-4">
@@ -131,7 +139,7 @@
 		<section class="lo-card space-y-4 p-4">
 			<div class="grid gap-4 sm:grid-cols-2">
 				<div>
-					<label for="ev-date" class="lo-label">Date & time</label>
+					<label for="ev-date" class="lo-label">Starts</label>
 					<input
 						id="ev-date"
 						type="datetime-local"
@@ -141,6 +149,34 @@
 						aria-invalid={!!errors.date}
 					/>
 					{#if errors.date}<p class="mt-1 text-xs font-medium text-lo-coral">{errors.date}</p>{/if}
+				</div>
+				<div>
+					<label for="ev-end-date" class="lo-label">Ends</label>
+					<input
+						id="ev-end-date"
+						type="datetime-local"
+						class="lo-input"
+						min={values.date || undefined}
+						bind:value={values.endDate}
+						readonly={mode === 'edit'}
+						aria-invalid={!!errors.endDate}
+						aria-describedby={errors.endDate
+							? 'ev-end-date-error'
+							: mode === 'edit'
+								? 'ev-end-date-hint'
+								: undefined}
+					/>
+					{#if errors.endDate}
+						<p id="ev-end-date-error" role="alert" class="mt-1 text-xs font-medium text-lo-coral">
+							{errors.endDate}
+						</p>
+					{:else if mode === 'edit'}
+						<p id="ev-end-date-hint" class="mt-1 text-xs text-lo-mute-500">
+							{values.endDate
+								? 'The end time is fixed when the event is created.'
+								: 'This event has no end time. Calendar export is unavailable.'}
+						</p>
+					{/if}
 				</div>
 				<div>
 					<label for="ev-location" class="lo-label">Location</label>
@@ -180,7 +216,9 @@
 				error={errors.latitude ?? errors.longitude}
 				disabled={pinLocked}
 			/>
-			<PrivacyPicker bind:value={values.privacy} />
+			{#if mode === 'create'}
+				<PrivacyPicker bind:value={values.privacy} />
+			{/if}
 		</section>
 
 		<Button size="lg" type="submit" fullWidth loading={submitting}>{submitLabel}</Button>

@@ -6,26 +6,29 @@ SvelteKit 5 · Houdini (GraphQL) · Tailwind 4 · Keycloak.
 ## Setup
 
 1. `pnpm install`
-2. `cp .env.example .env` and fill in the values.
-3. In Keycloak (realm `linkop`), create a **public** OpenID Connect client named after
-   `VITE_KEYCLOAK_CLIENT_ID` (default `linkop-frontend`):
-   - Standard flow on, PKCE `S256`
-   - Valid redirect URIs: `http://localhost:5173/*`
-   - Web origins: `http://localhost:5173`
-4. Start the backend (`dotnet run` in `../LinkOp`, serves `http://localhost:8000/graphql`).
-5. `pnpm dev`, then open http://localhost:5173
+2. `pnpm dev`, then open http://localhost:5173
 
-In dev, `/graphql` is proxied to the backend, so no CORS setup is needed.
+The committed `.env` is the only env file. It points both `pnpm dev` and the Vercel build
+at the online API (`https://api-linkop.duckdns.org`) and Keycloak
+(`https://auth-linkop.duckdns.org`, realm `linkop`, client `linkop`). Its values all ship
+to the browser, so never put secrets in it.
+
+The `linkop` Keycloak client must allow each address the app runs on:
+
+- Valid redirect URIs: `http://localhost:5173/*` and `https://linkop-frontend.vercel.app/*`
+- Web origins: `http://localhost:5173` and `https://linkop-frontend.vercel.app`
+
+In dev, `/graphql` is proxied to the API, so no CORS setup is needed locally.
 
 ## Scripts
 
-| Script             | What it does                                         |
-| ------------------ | ---------------------------------------------------- |
-| `pnpm dev`         | Dev server                                           |
-| `pnpm check`       | Type-check                                           |
-| `pnpm lint`        | Prettier + ESLint                                    |
+| Script             | What it does                                            |
+| ------------------ | ------------------------------------------------------- |
+| `pnpm dev`         | Dev server                                              |
+| `pnpm check`       | Type-check                                              |
+| `pnpm lint`        | Prettier + ESLint                                       |
 | `pnpm pull-schema` | Refresh `schema.graphql` from `VITE_APP_SERVER_API_URL` |
-| `pnpm generate`    | Regenerate Houdini stores from `src/**/*.gql`        |
+| `pnpm generate`    | Regenerate Houdini stores from `src/**/*.gql`           |
 
 ## Structure
 
@@ -41,3 +44,22 @@ src/
 
 Event covers are either an image URL or a built-in gradient saved as `linkop:cover/<id>`
 (see `features/events/services/covers.ts`).
+
+## Calendar invitations
+
+Create an event with a start and end time, then invite another registered user.
+The guest opens the event from **Invites**, chooses **Accept invitation**, then
+**Add to Google Calendar**. The calendar draft contains the event title,
+description, location and UTC time range. The guest must choose **Save** in
+Google Calendar; accepting the LinkOp invitation does not save it automatically.
+The accepted RSVP and calendar action remain available after reloading.
+
+`npm test` runs calendar URL, response handling and date validation tests.
+`npm run test:e2e` runs the two-user flow against the real local API on port 8000,
+Keycloak on port 8080 (realm/client `linkop`), and the frontend on port 5173.
+It uses installed Chrome and provisions synthetic local users using the local
+Keycloak admin (`admin` / `admin` by default; override with
+`E2E_KEYCLOAK_ADMIN_USERNAME` and `E2E_KEYCLOAK_ADMIN_PASSWORD`). Test users and
+private test events remain for inspection. The test verifies the persisted RSVP,
+calendar contents, mobile layout and Google handoff. Saving inside a Google
+account requires a separate signed-in verification.

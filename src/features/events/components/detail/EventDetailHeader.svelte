@@ -50,7 +50,18 @@
 			<div class="min-w-0">
 				<p class="font-medium text-lo-ink">{longDate}</p>
 				<p class="text-sm text-lo-mute-500">
-					{formatTime(event.eventDate)} · {relativeWhen(event.eventDate)}
+					{formatTime(event.eventDate)}
+					{#if new Date(event.eventEndDate) > date}
+						– {date.toDateString() === new Date(event.eventEndDate).toDateString()
+							? formatTime(event.eventEndDate)
+							: new Date(event.eventEndDate).toLocaleString('en-US', {
+									month: 'short',
+									day: 'numeric',
+									hour: 'numeric',
+									minute: '2-digit'
+								})}
+					{/if}
+					· {relativeWhen(event.eventDate)}
 				</p>
 			</div>
 		</div>

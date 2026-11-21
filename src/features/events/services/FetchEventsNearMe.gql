@@ -5,6 +5,7 @@ query FetchEventsNearMe($location: currentLocationInput!) {
 			eventName
 			eventDescription
 			eventDate
+			eventEndDate
 			locationName
 			privacy
 			pictureUrl

@@ -13,12 +13,9 @@ node_modules
 Thumbs.db
 
 # Env
-.env
 .env.*
-!.env.example
+# .env itself is committed: it only holds public build config
 !.env.test
-# Public build config (every VITE_ value ships to the browser anyway)
-!.env.production
 
 # Vite
 vite.config.js.timestamp-*

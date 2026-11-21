@@ -11,9 +11,11 @@
 		selected: string[];
 		/** User ids that can't be picked (e.g. the host) */
 		exclude?: string[];
+		/** User ids shown as already picked that can't be toggled off (e.g. existing guests) */
+		locked?: string[];
 	}
 
-	let { selected = $bindable(), exclude = [] }: Props = $props();
+	let { selected = $bindable(), exclude = [], locked = [] }: Props = $props();
 
 	const usersStore = new FetchUsersStore();
 	let loading = $state(true);
@@ -40,6 +42,7 @@
 	});
 
 	function toggle(id: string) {
+		if (locked.includes(id)) return;
 		selected = selected.includes(id) ? selected.filter((s) => s !== id) : [...selected, id];
 	}
 </script>
@@ -66,13 +69,16 @@
 			<p class="py-6 text-center text-sm text-lo-mute-500">No one matches "{search}".</p>
 		{:else}
 			{#each filtered as user (user.id)}
-				{@const isOn = selected.includes(user.id)}
+				{@const isLocked = locked.includes(user.id)}
+				{@const isOn = isLocked || selected.includes(user.id)}
 				<button
 					type="button"
 					onclick={() => toggle(user.id)}
 					aria-pressed={isOn}
-					class="flex w-full cursor-pointer items-center gap-3 rounded-2xl p-2 text-left
-						transition-colors {isOn ? 'bg-lo-violet/8' : 'hover:bg-lo-mute-50'}"
+					disabled={isLocked}
+					class="flex w-full items-center gap-3 rounded-2xl p-2 text-left transition-colors
+						{isLocked ? 'cursor-default opacity-60' : 'cursor-pointer'}
+						{isOn ? 'bg-lo-violet/8' : 'hover:bg-lo-mute-50'}"
 				>
 					<UserAvatar
 						firstName={user.firstname}
@@ -88,6 +94,9 @@
 						</span>
 						<span class="block truncate text-xs text-lo-mute-400">{user.email}</span>
 					</span>
+					{#if isLocked}
+						<span class="shrink-0 text-xs font-medium text-lo-mute-500">Invited</span>
+					{/if}
 					<span
 						class="flex h-6 w-6 items-center justify-center rounded-full border-2 transition-all
 							{isOn ? 'border-lo-violet bg-lo-violet text-lo-white' : 'border-lo-mute-300'}"

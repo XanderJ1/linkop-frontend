@@ -1,0 +1,8 @@
+mutation AcceptEvent($input: AcceptEventInput!) {
+	acceptEvent(input: $input) {
+		success
+		message
+		code
+		result
+	}
+}

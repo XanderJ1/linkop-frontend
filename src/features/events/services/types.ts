@@ -21,6 +21,7 @@ export interface EventSummary {
 	eventName: string;
 	eventDescription: string;
 	eventDate: string;
+	eventEndDate: string;
 	locationName: string;
 	privacy?: EventPrivacy | string;
 	eventLocation?: GeoPoint | null;
@@ -44,6 +45,7 @@ export interface EventFormValues {
 	description: string;
 	/** `YYYY-MM-DDTHH:mm` from <input type="datetime-local"> */
 	date: string;
+	endDate: string;
 	location: string;
 	imageUrl: string;
 	privacy: EventPrivacy;

@@ -38,6 +38,10 @@ directive @listSize(
   slicingArguments: [String!]
 ) on FIELD_DEFINITION
 
+input AcceptEventInput {
+  eventId: UUID!
+}
+
 input BooleanOperationFilterInput {
   eq: Boolean
   neq: Boolean
@@ -71,13 +75,14 @@ input CategoryOperationFilterInput {
 }
 
 input CreateEventInput {
-  date: DateTime!
   description: String!
-  eventLocation: EventLocationInput
+  endDate: DateTime!
+  eventLocation: eventLocationDtoInput
   imageUrl: String!
   location: String!
   name: String!
   privacy: Privacy!
+  startDate: DateTime!
 }
 
 """
@@ -109,11 +114,13 @@ input DeleteUserInput {
 }
 
 type EventContext {
+  capacity: Int!
   category: Category!
   creator: UserContext!
   creatorId: UUID!
   eventDate: DateTime!
   eventDescription: String!
+  eventEndDate: DateTime!
   eventLocation: EventLocation
   eventLocationId: UUID
   eventName: String!
@@ -126,11 +133,13 @@ type EventContext {
 
 input EventContextFilterInput {
   and: [EventContextFilterInput!]
+  capacity: IntOperationFilterInput
   category: CategoryOperationFilterInput
   creator: UserContextFilterInput
   creatorId: UuidOperationFilterInput
   eventDate: DateTimeOperationFilterInput
   eventDescription: StringOperationFilterInput
+  eventEndDate: DateTimeOperationFilterInput
   eventLocation: EventLocationFilterInput
   eventLocationId: UuidOperationFilterInput
   eventName: StringOperationFilterInput
@@ -143,11 +152,13 @@ input EventContextFilterInput {
 }
 
 input EventContextSortInput {
+  capacity: SortEnumType
   category: SortEnumType
   creator: UserContextSortInput
   creatorId: SortEnumType
   eventDate: SortEnumType
   eventDescription: SortEnumType
+  eventEndDate: SortEnumType
   eventLocation: EventLocationSortInput
   eventLocationId: SortEnumType
   eventName: SortEnumType
@@ -329,6 +340,21 @@ type GuestListEdge {
   node: GuestContext!
 }
 
+input IntOperationFilterInput {
+  eq: Int
+  gt: Int
+  gte: Int
+  in: [Int]
+  lt: Int
+  lte: Int
+  neq: Int
+  ngt: Int
+  ngte: Int
+  nin: [Int]
+  nlt: Int
+  nlte: Int
+}
+
 """A connection to a list of items."""
 type InvitedEventsConnection {
   """A list of edges."""
@@ -368,16 +394,17 @@ input ListFilterInputTypeOfGuestContextFilterInput {
 }
 
 type Mutation {
-  createEvent(input: CreateEventInput!): String!
+  acceptEvent(input: AcceptEventInput!): CallResultOfString!
+  createEvent(input: CreateEventInput!): CallResult!
   createNotification(input: createNotificationInput!): CallResult!
   createReminder(input: createReminderInput!): CallResult!
-  deleteEvent(input: DeleteEventInput!): CallResultOfString!
+  deleteEvent(input: DeleteEventInput!): CallResult!
   deleteReminder(input: deleteReminderInput!): CallResult!
   deleteUser(input: DeleteUserInput!): CallResult!
   foo: String!
   register(input: RegisterInput!): CallResultOfString!
-  updateEvent(input: UpdateEventInput!): CallResultOfString!
-  updateGuestList(input: UpdateGuestListInput!): CallResultOfString!
+  updateEvent(input: UpdateEventInput!): CallResult!
+  updateGuestList(input: UpdateGuestListInput!): CallResult!
   updateName(input: UpdateNameInput!): String!
   updateProfile(input: UpdateProfileInput!): CallResult!
   updateReminder(input: updateReminderInput!): CallResult!
@@ -825,6 +852,11 @@ input currentLocationInput {
 
 input deleteReminderInput {
   reminderId: UUID!
+}
+
+input eventLocationDtoInput {
+  latitude: Float!
+  longitude: Float!
 }
 
 input fetchIdInput {

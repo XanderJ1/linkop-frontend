@@ -17,13 +17,12 @@
 					input: {
 						name: values.name.trim(),
 						description: values.description.trim(),
-						date: new Date(values.date).toISOString(),
+						startDate: new Date(values.date).toISOString(),
+						endDate: new Date(values.endDate).toISOString(),
 						location: values.location.trim(),
 						imageUrl: values.imageUrl,
 						privacy: values.privacy,
-						// The backend ignores this id and creates its own, but the input requires one
 						eventLocation: {
-							id: crypto.randomUUID(),
 							latitude: values.latitude!,
 							longitude: values.longitude!
 						}
@@ -37,7 +36,7 @@
 			return;
 		}
 		toast.success(`${values.name.trim()} is on the calendar 🎉`);
-		// createEvent returns only a message, not the new id, so land on the list
+		// createEvent returns a message but not the new id, so land on the list
 		goto('/events');
 	}
 </script>

@@ -6,6 +6,7 @@ query FetchInvitedEvents {
 			eventName
 			eventDescription
 			eventDate
+			eventEndDate
 			locationName
 			privacy
 			pictureUrl

@@ -7,6 +7,7 @@ query FetchEvent($id: UUID!) {
 			eventName
 			eventDescription
 			eventDate
+			eventEndDate
 			locationName
 			privacy
 			eventLocation {
@@ -45,6 +46,7 @@ query FetchEvent($id: UUID!) {
 			eventName
 			eventDescription
 			eventDate
+			eventEndDate
 			locationName
 			privacy
 			eventLocation {
