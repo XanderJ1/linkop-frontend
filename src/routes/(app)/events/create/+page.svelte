@@ -17,12 +17,12 @@
 					input: {
 						name: values.name.trim(),
 						description: values.description.trim(),
-						date: new Date(values.date).toISOString(),
+						startDate: new Date(values.date).toISOString(),
+						endDate: new Date(values.endDate).toISOString(),
 						location: values.location.trim(),
 						imageUrl: values.imageUrl,
 						privacy: values.privacy,
 						eventLocation: {
-							id: crypto.randomUUID(),
 							latitude: values.latitude!,
 							longitude: values.longitude!
 						}
