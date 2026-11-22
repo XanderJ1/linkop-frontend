@@ -75,14 +75,13 @@ input CategoryOperationFilterInput {
 }
 
 input CreateEventInput {
+  date: DateTime!
   description: String!
-  endDate: DateTime!
-  eventLocation: eventLocationDtoInput
+  eventLocation: EventLocationInput
   imageUrl: String!
   location: String!
   name: String!
   privacy: Privacy!
-  startDate: DateTime!
 }
 
 """
@@ -395,7 +394,7 @@ input ListFilterInputTypeOfGuestContextFilterInput {
 
 type Mutation {
   acceptEvent(input: AcceptEventInput!): CallResultOfString!
-  createEvent(input: CreateEventInput!): CallResult!
+  createEvent(input: CreateEventInput!): String!
   createNotification(input: createNotificationInput!): CallResult!
   createReminder(input: createReminderInput!): CallResult!
   deleteEvent(input: DeleteEventInput!): CallResult!
