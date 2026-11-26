@@ -1,0 +1,7 @@
+mutation InviteGuest($input: InviteGuestInput!) {
+	inviteGuest(input: $input) {
+		success
+		message
+		code
+	}
+}

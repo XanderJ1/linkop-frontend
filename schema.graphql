@@ -404,7 +404,7 @@ type Mutation {
   foo: String!
   register(input: RegisterInput!): CallResultOfString!
   updateEvent(input: UpdateEventInput!): CallResult!
-  updateGuestList(input: UpdateGuestListInput!): CallResult!
+  inviteGuest(input: InviteGuestInput!): CallResult!
   updateName(input: UpdateNameInput!): String!
   updateProfile(input: UpdateProfileInput!): CallResult!
   updateReminder(input: updateReminderInput!): CallResult!
@@ -758,7 +758,7 @@ input UpdateEventInput {
   privacy: Privacy
 }
 
-input UpdateGuestListInput {
+input InviteGuestInput {
   eventId: UUID!
   guestListIds: [UUID!]!
 }

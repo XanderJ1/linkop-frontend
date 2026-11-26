@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
-	import { UpdateGuestListStore } from '$houdini';
+	import { InviteGuestStore } from '$houdini';
 	import Modal from '$components/custom/Modal.svelte';
 	import Button from '$components/general/Button.svelte';
 	import UserPicker from '$features/users/components/UserPicker.svelte';
@@ -17,7 +17,7 @@
 
 	let { open, eventId, hostId, currentGuestIds, onclose, onsaved }: Props = $props();
 
-	const updateStore = new UpdateGuestListStore();
+	const inviteStore = new InviteGuestStore();
 	let selected = $state<string[]>([]);
 	let saving = $state(false);
 
@@ -36,9 +36,9 @@
 		}
 		saving = true;
 		const outcome = await runMutation(
-			() => updateStore.mutate({ input: { eventId, guestListIds: newGuestIds } }),
-			(d) => d.updateGuestList,
-			"Couldn't update the guest list"
+			() => inviteStore.mutate({ input: { eventId, guestListIds: newGuestIds } }),
+			(d) => d.inviteGuest,
+			"Couldn't invite guests"
 		);
 		saving = false;
 		if (!outcome.ok) {
