@@ -1,3 +1,5 @@
+import type { EventCategory } from './categories';
+
 export type GuestStatus = 'PENDING' | 'ACCEPTED' | 'DECLINED' | 'CANCELLED';
 
 export interface PersonSummary {
@@ -26,7 +28,7 @@ export interface EventSummary {
 	privacy?: EventPrivacy | string;
 	eventLocation?: GeoPoint | null;
 	pictureUrl: string;
-	category: string;
+	category: EventCategory;
 	creatorId: string;
 	creator?: PersonSummary;
 	guests: GuestSummary[];
@@ -49,6 +51,7 @@ export interface EventFormValues {
 	location: string;
 	imageUrl: string;
 	privacy: EventPrivacy;
+	category: EventCategory;
 	latitude: number | null;
 	longitude: number | null;
 }

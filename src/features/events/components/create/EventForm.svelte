@@ -2,6 +2,7 @@
 	import { untrack } from 'svelte';
 	import Button from '$components/general/Button.svelte';
 	import CoverPicker from '$features/events/components/create/CoverPicker.svelte';
+	import CategoryPicker from '$features/events/components/create/CategoryPicker.svelte';
 	import EventCover from '$features/events/components/EventCover.svelte';
 	import LocationPin from '$features/events/components/create/LocationPin.svelte';
 	import PrivacyPicker from '$features/events/components/create/PrivacyPicker.svelte';
@@ -45,6 +46,7 @@
 			location: initial.location ?? '',
 			imageUrl: initial.imageUrl ?? presetUrl('sunset'),
 			privacy: initial.privacy ?? 'PUBLIC',
+			category: initial.category ?? 'OTHER',
 			latitude: initial.latitude ?? null,
 			longitude: initial.longitude ?? null
 		}))
@@ -61,6 +63,7 @@
 		values.imageUrl = t.cover;
 		values.name = t.name;
 		values.description = t.description;
+		values.category = t.category;
 	}
 
 	untrack(() => templateId && applyTemplate(templateId));
@@ -192,6 +195,8 @@
 					{/if}
 				</div>
 			</div>
+
+			<CategoryPicker bind:value={values.category} error={errors.category} />
 
 			<div>
 				<label for="ev-desc" class="lo-label">Description</label>

@@ -22,6 +22,8 @@
 						location: values.location.trim(),
 						imageUrl: values.imageUrl,
 						privacy: values.privacy,
+						category: values.category,
+						guestIds: [],
 						eventLocation: {
 							latitude: values.latitude!,
 							longitude: values.longitude!

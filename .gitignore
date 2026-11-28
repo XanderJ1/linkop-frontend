@@ -13,7 +13,7 @@ node_modules
 Thumbs.db
 
 # Env
-.env.*
+
 # .env itself is committed: it only holds public build config
 !.env.test
 

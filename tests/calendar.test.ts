@@ -103,6 +103,7 @@ test('event validation requires an end after the start', () => {
 		location: 'Test room',
 		imageUrl: 'linkop:cover/sunset',
 		privacy: 'PRIVATE',
+		category: 'OTHER',
 		latitude: 0,
 		longitude: 0
 	};

@@ -75,9 +75,12 @@ input CategoryOperationFilterInput {
 }
 
 input CreateEventInput {
+  category: Category!
   description: String!
   endDate: DateTime!
   eventLocation: eventLocationDtoInput
+  guestIds: [UUID!]!
+  guestListEmail: [String!]
   imageUrl: String!
   location: String!
   name: String!
@@ -106,7 +109,7 @@ input DateTimeOperationFilterInput {
 }
 
 input DeleteEventInput {
-  eventId: Int!
+  eventId: UUID!
 }
 
 input DeleteUserInput {
@@ -748,6 +751,7 @@ The `UUID` scalar type represents a Universally Unique Identifier (UUID) as defi
 scalar UUID
 
 input UpdateEventInput {
+  category: Category!
   date: DateTime
   description: String
   eventId: String!
@@ -760,6 +764,7 @@ input UpdateEventInput {
 
 input InviteGuestInput {
   eventId: UUID!
+  guestListEmail: [String!]
   guestListIds: [UUID!]!
 }
 

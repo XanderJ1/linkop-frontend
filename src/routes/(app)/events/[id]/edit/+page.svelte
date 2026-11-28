@@ -41,6 +41,7 @@
 						description: values.description.trim(),
 						date: new Date(values.date).toISOString(),
 						locationName: values.location.trim(),
+						category: values.category,
 						eventLocation: pinMoved
 							? { id: savedPin.id, latitude: values.latitude!, longitude: values.longitude! }
 							: undefined
@@ -86,6 +87,7 @@
 				location: detail.event.locationName,
 				imageUrl: detail.event.pictureUrl,
 				privacy: detail.event.privacy === 'PRIVATE' ? 'PRIVATE' : 'PUBLIC',
+				category: detail.event.category,
 				latitude: savedPin?.latitude ?? null,
 				longitude: savedPin?.longitude ?? null
 			}}

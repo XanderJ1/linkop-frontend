@@ -31,6 +31,8 @@ let syncPromise: Promise<void> | null = null;
 
 async function lookup(sub: string) {
 	const result = await fetchMe.fetch({ variables: { sub }, policy: 'NetworkOnly' });
+	if (result.errors?.length) throw new Error(result.errors[0].message);
+	if (!result.data) throw new Error('The API returned no profile lookup result.');
 	return (result.data?.fetchUsers?.nodes?.[0] as BackendUser | undefined) ?? null;
 }
 
@@ -42,7 +44,7 @@ export function syncSession() {
 		try {
 			let user = await lookup(sub);
 			if (!user) {
-				await register.mutate({
+				const registration = await register.mutate({
 					input: {
 						keycloakSub: sub,
 						email: auth.currentUserEmail ?? '',
@@ -50,13 +52,17 @@ export function syncSession() {
 						lastName: auth.currentUserLastName ?? ''
 					}
 				});
+				if (registration.errors?.length) throw new Error(registration.errors[0].message);
+				if (!registration.data?.register.success) {
+					throw new Error(registration.data?.register.message || 'Profile registration failed.');
+				}
 				user = await lookup(sub);
 			}
 			session.user = user;
 			session.error = user ? null : 'We could not set up your LinkOp profile.';
 		} catch (err) {
 			console.error('[Session] sync failed', err);
-			session.error = 'We could not reach the LinkOp server.';
+			session.error = err instanceof Error ? err.message : 'Profile setup failed. Please try again.';
 		} finally {
 			session.ready = true;
 		}

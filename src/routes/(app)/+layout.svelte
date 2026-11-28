@@ -46,8 +46,7 @@
 	<div class="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-center">
 		<h1 class="text-2xl font-bold">We couldn't get you in.</h1>
 		<p class="max-w-sm text-sm text-lo-mute-500">
-			{session.error ?? 'Something went wrong while loading your profile.'} Make sure the LinkOp API is
-			running, then try again.
+			{session.error ?? 'Something went wrong while loading your profile.'}
 		</p>
 		<div class="flex flex-wrap items-center justify-center gap-2.5">
 			<Button variant="primary" onclick={retry}>Try again</Button>

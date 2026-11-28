@@ -1,4 +1,5 @@
 import { presetUrl } from '$features/events/services/covers';
+import type { EventCategory } from '$features/events/services/categories';
 
 export interface EventTemplate {
 	id: string;
@@ -7,12 +8,14 @@ export interface EventTemplate {
 	cover: string;
 	name: string;
 	description: string;
+	category: EventCategory;
 }
 
 /** Starting points that pre-fill the cover and copy on the event form */
 export const EVENT_TEMPLATES: EventTemplate[] = [
 	{
 		id: 'meetup',
+		category: 'OTHER',
 		label: 'Casual meetup',
 		emoji: '👋',
 		cover: presetUrl('lagoon'),
@@ -22,6 +25,7 @@ export const EVENT_TEMPLATES: EventTemplate[] = [
 	},
 	{
 		id: 'party',
+		category: 'ENTERTAINMENT',
 		label: 'Party',
 		emoji: '🎉',
 		cover: presetUrl('sunset'),
@@ -30,6 +34,7 @@ export const EVENT_TEMPLATES: EventTemplate[] = [
 	},
 	{
 		id: 'happy-hour',
+		category: 'HAPPY_HOUR',
 		label: 'Happy hour',
 		emoji: '🍹',
 		cover: presetUrl('citrus'),
@@ -39,6 +44,7 @@ export const EVENT_TEMPLATES: EventTemplate[] = [
 	},
 	{
 		id: 'meeting',
+		category: 'MEETING',
 		label: 'Formal meeting',
 		emoji: '💼',
 		cover: presetUrl('midnight'),

@@ -6,6 +6,7 @@
 		Megaphone01Icon,
 		AlarmClockIcon,
 		ArrowLeft02Icon,
+		Delete02Icon,
 		UserAdd01Icon
 	} from '@hugeicons/core-free-icons';
 	import Button from '$components/general/Button.svelte';
@@ -13,6 +14,7 @@
 	import Countdown from '$features/events/components/Countdown.svelte';
 	import EventCover from '$features/events/components/EventCover.svelte';
 	import EventDetailHeader from '$features/events/components/detail/EventDetailHeader.svelte';
+	import DeleteEventModal from '$features/events/components/detail/DeleteEventModal.svelte';
 	import EventDetailSkeleton from '$features/events/components/detail/EventDetailSkeleton.svelte';
 	import GuestList from '$features/events/components/detail/GuestList.svelte';
 	import InvitationActions from '$features/events/components/detail/InvitationActions.svelte';
@@ -30,6 +32,7 @@
 	let guestsOpen = $state(false);
 	let announceOpen = $state(false);
 	let reminderOpen = $state(false);
+	let deleteOpen = $state(false);
 
 	$effect(() => {
 		detail.load(eventId);
@@ -121,6 +124,10 @@
 									Remind guests
 								</Button>
 							{/if}
+							<Button variant="softdanger" onclick={() => (deleteOpen = true)}>
+								<HugeiconsIcon icon={Delete02Icon} size={15} color="currentColor" strokeWidth={2} />
+								Delete event
+							</Button>
 						</div>
 					{:else if myInvite}
 						<InvitationActions
@@ -187,6 +194,12 @@
 	</div>
 
 	{#if detail.isHost}
+		<DeleteEventModal
+			open={deleteOpen}
+			eventId={event.id}
+			eventName={event.eventName}
+			onclose={() => (deleteOpen = false)}
+		/>
 		<ManageGuestsModal
 			open={guestsOpen}
 			eventId={event.id}

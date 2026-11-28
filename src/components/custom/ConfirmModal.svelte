@@ -27,7 +27,7 @@
 	<p class="text-sm text-lo-mute-600">{description}</p>
 
 	{#snippet footer()}
-		<Button variant="secondary" onclick={onclose}>Keep it</Button>
+		<Button variant="secondary" disabled={loading} onclick={onclose}>Keep it</Button>
 		<Button variant="danger" {loading} onclick={onconfirm}>{confirmLabel}</Button>
 	{/snippet}
 </Modal>

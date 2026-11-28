@@ -15,6 +15,9 @@ export const eventSchema = z.object({
 	location: z.string().trim().min(2, 'Where is it happening?').max(200),
 	imageUrl: z.string().min(1, 'Pick a cover'),
 	privacy: z.enum(['PUBLIC', 'PRIVATE']),
+	category: z.enum(['ENTERTAINMENT', 'MEETING', 'HAPPY_HOUR', 'OTHER'], {
+		error: 'Choose an event category'
+	}),
 	latitude: z
 		.number()
 		.min(-90, 'Latitude is between -90 and 90')
